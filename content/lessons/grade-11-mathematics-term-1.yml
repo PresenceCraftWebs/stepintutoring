@@ -1,0 +1,62 @@
+# Grade 11 Mathematics — Term 1 (CAPS)
+# SEED DATA — see grade-10-mathematics-term-1.yml header for how seeds work.
+lessons:
+  - id: g11-math-t1-01
+    title: Simplifying surds
+    topic: Exponents and Surds
+    order: 1
+    hostProvider: r2
+    r2VideoKey: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4
+    r2FileSizeBytes: 3400000
+    durationMinutes: 16
+    tags: [exam-prep]
+    notes: |
+      ## What you will learn
+      Simplifying surds, rationalising denominators and solving simple surd
+      equations.
+
+      ## Key points
+      - $\sqrt{ab} = \sqrt{a}\sqrt{b}$ (for $a, b \geq 0$).
+      - To rationalise $\frac{1}{\sqrt{a}}$, multiply by
+        $\frac{\sqrt{a}}{\sqrt{a}}$.
+      - Always check surd-equation answers in the original equation.
+  - id: g11-math-t1-02
+    title: Completing the square
+    topic: Equations and Inequalities
+    order: 2
+    hostProvider: r2
+    r2VideoKey: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4
+    r2FileSizeBytes: 4500000
+    durationMinutes: 18
+    tags: [past-paper]
+    worksheet: /worksheets/g11-math-t1-02.pdf
+    notes: |
+      ## What you will learn
+      Rewriting a quadratic in the form $a(x + p)^2 + q$ and using it to solve
+      equations and find turning points — a favourite in past papers.
+
+      ## Key points
+      - Halve the coefficient of $x$, square it, add and subtract it.
+      - The turning point of $y = a(x+p)^2 + q$ is $(-p; q)$.
+      - This method works even when the quadratic does not factorise.
+  - id: g11-math-t1-03
+    title: The nature of roots
+    topic: Equations and Inequalities
+    order: 3
+    hostProvider: youtube
+    youtubeId: eRsGyueVLvQ
+    durationMinutes: 14
+    tags: [exam-prep]
+    notes: |
+      ## What you will learn
+      Using the discriminant $\Delta = b^2 - 4ac$ to describe the roots of a
+      quadratic equation without solving it.
+
+      ## Key points
+      - $\Delta > 0$: two unequal real roots (rational if $\Delta$ is a
+        perfect square).
+      - $\Delta = 0$: two equal real roots.
+      - $\Delta < 0$: no real roots.
+
+      > This lesson streams from YouTube, so it needs a data connection —
+      > it cannot be downloaded for offline viewing.

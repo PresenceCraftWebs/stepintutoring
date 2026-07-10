@@ -1,0 +1,40 @@
+# Grade 11 Physical Sciences — Term 1 (CAPS)
+# SEED DATA — see grade-10-mathematics-term-1.yml header for how seeds work.
+lessons:
+  - id: g11-phys-t1-01
+    title: Vectors in two dimensions
+    topic: Vectors
+    order: 1
+    hostProvider: r2
+    r2VideoKey: https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_2MB.mp4
+    r2FileSizeBytes: 2000000
+    durationMinutes: 17
+    tags: []
+    notes: |
+      ## What you will learn
+      Adding vectors in two dimensions graphically and by components, and
+      finding a resultant's magnitude and direction.
+
+      ## Key points
+      - Resolve into $x$ and $y$ components: $F_x = F\cos\theta$,
+        $F_y = F\sin\theta$.
+      - Add components separately, then use Pythagoras for the magnitude.
+      - Direction: $\tan\theta = \frac{R_y}{R_x}$ — draw the sketch first.
+  - id: g11-phys-t1-02
+    title: "Newton's first law and friction"
+    topic: "Newton's Laws"
+    order: 2
+    hostProvider: r2
+    r2VideoKey: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4
+    r2FileSizeBytes: 2500000
+    durationMinutes: 15
+    tags: [exam-prep]
+    notes: |
+      ## What you will learn
+      Newton's first law, inertia, and how static and kinetic friction act on
+      objects on a surface.
+
+      ## Key points
+      - An object keeps its state of motion unless a *net* force acts on it.
+      - Static friction adjusts up to a maximum: $f_s \leq \mu_s N$.
+      - Kinetic friction is constant: $f_k = \mu_k N$.

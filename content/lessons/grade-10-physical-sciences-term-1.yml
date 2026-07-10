@@ -1,0 +1,59 @@
+# Grade 10 Physical Sciences — Term 1 (CAPS)
+# SEED DATA — see grade-10-mathematics-term-1.yml header for how seeds work.
+lessons:
+  - id: g10-phys-t1-01
+    title: Classification of matter
+    topic: Matter and Classification
+    order: 1
+    hostProvider: r2
+    r2VideoKey: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4
+    r2FileSizeBytes: 2500000
+    durationMinutes: 13
+    tags: []
+    notes: |
+      ## What you will learn
+      Classifying materials as elements, compounds and mixtures, and as
+      metals, metalloids and non-metals.
+
+      ## Key points
+      - A *pure substance* is an element or a compound.
+      - Mixtures can be separated by physical means; compounds cannot.
+      - Know the difference between homogeneous and heterogeneous mixtures.
+  - id: g10-phys-t1-02
+    title: States of matter and the kinetic molecular theory
+    topic: States of Matter
+    order: 2
+    hostProvider: r2
+    r2VideoKey: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4
+    r2FileSizeBytes: 2300000
+    durationMinutes: 15
+    tags: [revision]
+    notes: |
+      ## What you will learn
+      How the kinetic molecular theory explains solids, liquids and gases,
+      and what happens to particles during changes of state.
+
+      ## Key points
+      - Particles are always moving; temperature measures their average
+        kinetic energy.
+      - Melting, evaporation and sublimation absorb energy; the reverse
+        changes release energy.
+      - Temperature stays constant *during* a change of state.
+  - id: g10-phys-t1-03
+    title: Atomic structure and models of the atom
+    topic: The Atom
+    order: 3
+    hostProvider: r2
+    r2VideoKey: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4
+    r2FileSizeBytes: 6300000
+    durationMinutes: 19
+    tags: [exam-prep]
+    notes: |
+      ## What you will learn
+      Protons, neutrons and electrons; atomic number and mass number; and how
+      the model of the atom developed over time.
+
+      ## Key points
+      - Atomic number = number of protons; it defines the element.
+      - Mass number = protons + neutrons.
+      - Isotopes: same protons, different neutrons.

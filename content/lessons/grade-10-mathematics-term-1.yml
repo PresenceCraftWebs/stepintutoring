@@ -1,0 +1,89 @@
+# Grade 10 Mathematics — Term 1 (CAPS)
+#
+# SEED DATA: r2VideoKey values below are full URLs pointing at small,
+# openly-licensed sample MP4s (Google/Blender demo clips) so the whole
+# streaming + download flow can be tested before R2 is wired in.
+# Real lessons produced by the upload pipeline use object keys like
+# "videos/<lesson-id>.mp4" instead — see WIRING.md ("Pointing at real content").
+# r2FileSizeBytes values for seeds are approximate.
+lessons:
+  - id: g10-math-t1-01
+    title: Simplifying algebraic expressions
+    topic: Algebraic Expressions
+    order: 1
+    hostProvider: r2
+    r2VideoKey: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4
+    r2FileSizeBytes: 2500000
+    durationMinutes: 14
+    tags: []
+    worksheet: /worksheets/g10-math-t1-01.pdf
+    notes: |
+      ## What you will learn
+      How to add, subtract and multiply algebraic expressions, and how to
+      spot **like terms** quickly.
+
+      ## Key points
+      - Only *like terms* (same variable, same exponent) can be added or subtracted.
+      - Multiply coefficients and add exponents when multiplying powers of the same base.
+      - Always write your final answer in descending powers.
+
+      ## Before the next lesson
+      Try questions 1–6 on the worksheet. Mark your own work with the memo on
+      the last page.
+  - id: g10-math-t1-02
+    title: "Factorising: common factor and difference of squares"
+    topic: Algebraic Expressions
+    order: 2
+    hostProvider: r2
+    r2VideoKey: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4
+    r2FileSizeBytes: 2300000
+    durationMinutes: 16
+    tags: [revision]
+    notes: |
+      ## What you will learn
+      The first two factorising tools you need for the whole of FET maths:
+      taking out a **highest common factor** and recognising a
+      **difference of two squares**.
+
+      ## Key points
+      - Always take out the common factor *first*, then look again.
+      - $a^2 - b^2 = (a-b)(a+b)$ — both terms must be perfect squares.
+      - A sum of squares does **not** factorise.
+  - id: g10-math-t1-03
+    title: Laws of exponents
+    topic: Exponents
+    order: 3
+    hostProvider: r2
+    r2VideoKey: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4
+    r2FileSizeBytes: 6300000
+    durationMinutes: 18
+    tags: [revision]
+    notes: |
+      ## What you will learn
+      The five exponent laws, with worked examples of simplifying expressions
+      that mix multiplication, division and powers of powers.
+
+      ## Key points
+      - $a^m \times a^n = a^{m+n}$ and $a^m \div a^n = a^{m-n}$
+      - $(a^m)^n = a^{mn}$
+      - $a^0 = 1$ (for $a \neq 0$) and $a^{-n} = \frac{1}{a^n}$
+  - id: g10-math-t1-04
+    title: Introduction to number patterns
+    topic: Number Patterns
+    order: 4
+    hostProvider: youtube
+    youtubeId: aqz-KE-bpKQ
+    durationMinutes: 12
+    tags: []
+    notes: |
+      ## What you will learn
+      How to find the general term $T_n$ of a linear number pattern and use it
+      to predict any term in the sequence.
+
+      ## Key points
+      - A *linear* pattern has a constant difference between terms.
+      - $T_n = dn + c$ where $d$ is the constant difference.
+      - Check your formula by substituting $n = 1$ and $n = 2$.
+
+      > This lesson streams from YouTube, so it needs a data connection —
+      > it cannot be downloaded for offline viewing.
