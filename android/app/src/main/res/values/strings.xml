@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Step-In Tutoring</string>
+    <string name="title_activity_main">Step-In Tutoring</string>
+    <string name="package_name">za.org.stepintutoring.app</string>
+    <string name="custom_url_scheme">za.org.stepintutoring.app</string>
+</resources>

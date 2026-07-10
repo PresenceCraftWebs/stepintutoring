@@ -1,0 +1,72 @@
+@import 'tailwindcss';
+
+/*
+ * Step-In Tutoring design system.
+ *
+ * Calm study-app feel: warm paper background, deep teal brand, high contrast,
+ * one typeface (Atkinson Hyperlegible — designed by the Braille Institute for
+ * maximum legibility; imported in main.tsx). Subject accent colours come from
+ * content/subjects.json and are applied via inline styles, not utilities.
+ */
+@theme {
+  --font-sans:
+    'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', Roboto,
+    sans-serif;
+
+  /* Brand — deep teal ("step in" / growth / calm). */
+  --color-brand-50: #eef7f5;
+  --color-brand-100: #d7ece8;
+  --color-brand-200: #aed8d0;
+  --color-brand-300: #7dbdb2;
+  --color-brand-400: #4d9d90;
+  --color-brand-500: #2c8072;
+  --color-brand-600: #16695d;
+  --color-brand-700: #0d5c55; /* primary */
+  --color-brand-800: #0b4740;
+  --color-brand-900: #093733;
+
+  /* Neutrals — warm, paper-like. */
+  --color-paper: #f8f7f3;
+  --color-surface: #ffffff;
+  --color-ink: #1d2926;
+  --color-ink-soft: #47554f;
+  --color-ink-faint: #71807a;
+  --color-line: #e4e3dc;
+
+  /* Semantic. */
+  --color-good: #1a7f37;
+  --color-warn: #b45309;
+  --color-danger: #b3261e;
+
+  --radius-card: 1rem;
+}
+
+html {
+  background-color: var(--color-paper);
+  /* Respect Android system font-size accessibility settings. */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background-color: var(--color-paper);
+  overscroll-behavior-y: none;
+}
+
+/* Native-app feel inside the Capacitor WebView. */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+button {
+  touch-action: manipulation;
+}
+
+/* Safe-area support (notches, gesture bars) for the fixed bottom tab bar. */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
