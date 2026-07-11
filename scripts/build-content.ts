@@ -19,7 +19,7 @@ import { load as parseYaml } from 'js-yaml';
 
 // Duplicated (small, dependency-free) from src/content/types.ts so the script
 // has no import path into app code; keep the two in sync.
-const VALID_GRADES = [8, 9, 10, 11, 12];
+const VALID_GRADES = [10, 11, 12]; // FET phase only
 const VALID_TERMS = [1, 2, 3, 4];
 const VALID_TAGS = ['exam-prep', 'past-paper', 'revision'];
 const YOUTUBE_ID_RE = /^[A-Za-z0-9_-]{11}$/;

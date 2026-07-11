@@ -1,8 +1,11 @@
 [
   { "id": "mathematics", "name": "Mathematics", "icon": "sigma", "color": "#2456c4" },
+  { "id": "mathematical-literacy", "name": "Mathematical Literacy", "icon": "calculator", "color": "#0e7490" },
   { "id": "physical-sciences", "name": "Physical Sciences", "icon": "atom", "color": "#7434c9" },
   { "id": "life-sciences", "name": "Life Sciences", "icon": "leaf", "color": "#13795b" },
-  { "id": "english", "name": "English", "icon": "book", "color": "#c2266f" },
   { "id": "accounting", "name": "Accounting", "icon": "ledger", "color": "#b45309" },
-  { "id": "geography", "name": "Geography", "icon": "globe", "color": "#0e7490" }
+  { "id": "business-studies", "name": "Business Studies", "icon": "briefcase", "color": "#c2266f" },
+  { "id": "economics", "name": "Economics", "icon": "trend", "color": "#be123c" },
+  { "id": "geography", "name": "Geography", "icon": "globe", "color": "#65a30d" },
+  { "id": "history", "name": "History", "icon": "scroll", "color": "#78350f" }
 ]

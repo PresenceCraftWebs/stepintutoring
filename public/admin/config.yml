@@ -36,18 +36,21 @@ collections:
       - name: grade
         label: Grade (must match the file name)
         widget: select
-        options: ['8', '9', '10', '11', '12']
+        options: ['10', '11', '12']
         hint: Only used when creating a new file — pick once, don't change.
       - name: subject
         label: Subject id (must match subjects)
         widget: select
         options:
           - mathematics
+          - mathematical-literacy
           - physical-sciences
           - life-sciences
-          - english
           - accounting
+          - business-studies
+          - economics
           - geography
+          - history
       - name: term
         label: Term
         widget: select
@@ -160,7 +163,19 @@ collections:
               - name: icon
                 label: Icon
                 widget: select
-                options: [sigma, atom, leaf, book, ledger, globe]
+                options:
+                  [
+                    sigma,
+                    calculator,
+                    atom,
+                    leaf,
+                    book,
+                    ledger,
+                    briefcase,
+                    trend,
+                    globe,
+                    scroll,
+                  ]
               - name: color
                 label: Accent colour
                 widget: color

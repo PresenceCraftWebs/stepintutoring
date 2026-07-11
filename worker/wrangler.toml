@@ -18,7 +18,7 @@ R2_ACCOUNT_ID = "YOUR_CLOUDFLARE_ACCOUNT_ID"
 # Must match [[r2_buckets]].bucket_name above.
 R2_BUCKET_NAME = "sit-videos"
 # WIRING: the GitHub repo that holds this project, e.g. "step-in-tutoring/app".
-GITHUB_REPO = "YOUR_GITHUB_OWNER/YOUR_REPO"
+GITHUB_REPO = "PresenceCraftWebs/stepintutoring"
 GITHUB_BRANCH = "main"
 
 # ---------------------------------------------------------------------------

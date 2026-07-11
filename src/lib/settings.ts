@@ -8,6 +8,7 @@ import { Preferences } from '@capacitor/preferences';
 
 const KEYS = {
   grade: 'sit.grade',
+  subjects: 'sit.subjects',
   wifiOnly: 'sit.downloads.wifiOnly',
   chargingOnly: 'sit.downloads.chargingOnly',
   adminKey: 'sit.admin.key',
@@ -28,6 +29,24 @@ export async function getSelectedGrade(): Promise<number | null> {
 
 export async function setSelectedGrade(grade: number): Promise<void> {
   await set(KEYS.grade, String(grade));
+}
+
+/** The subjects the student takes (their package). null = never chosen. */
+export async function getSelectedSubjects(): Promise<string[] | null> {
+  const v = await get(KEYS.subjects);
+  if (!v) return null;
+  try {
+    const parsed: unknown = JSON.parse(v);
+    return Array.isArray(parsed)
+      ? parsed.filter((s): s is string => typeof s === 'string')
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function setSelectedSubjects(ids: string[]): Promise<void> {
+  await set(KEYS.subjects, JSON.stringify(ids));
 }
 
 export async function getWifiOnly(): Promise<boolean> {

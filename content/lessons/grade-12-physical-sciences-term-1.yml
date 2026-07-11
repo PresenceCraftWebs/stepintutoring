@@ -1,0 +1,40 @@
+# Grade 12 Physical Sciences — Term 1 (CAPS)
+# SEED DATA — see grade-10-mathematics-term-1.yml header for how seeds work.
+lessons:
+  - id: g12-phys-t1-01
+    title: Momentum and impulse
+    topic: Momentum and Impulse
+    order: 1
+    hostProvider: r2
+    r2VideoKey: https://test-videos.co.uk/vids/jellyfish/mp4/h264/360/Jellyfish_360_10s_2MB.mp4
+    r2FileSizeBytes: 2095805
+    durationMinutes: 19
+    tags: [exam-prep]
+    notes: |
+      ## What you will learn
+      Momentum, impulse, and applying conservation of momentum to collisions
+      and explosions in one dimension.
+
+      ## Key points
+      - $p = mv$ (kg·m/s) — momentum is a vector; choose a positive direction
+        first.
+      - Impulse: $F_{net}\Delta t = \Delta p$.
+      - Total momentum is conserved in an isolated system.
+  - id: g12-phys-t1-02
+    title: Vertical projectile motion
+    topic: Vertical Projectile Motion
+    order: 2
+    hostProvider: r2
+    r2VideoKey: https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_2MB.mp4
+    r2FileSizeBytes: 2070701
+    durationMinutes: 17
+    tags: [past-paper]
+    notes: |
+      ## What you will learn
+      Objects in free fall: using the equations of motion with $g$, and
+      drawing position, velocity and acceleration graphs.
+
+      ## Key points
+      - Take a direction as positive and keep it for the whole problem.
+      - At the highest point $v = 0$ but $a = g$ (never zero).
+      - Time up = time down for the same height (no air resistance).

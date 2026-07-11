@@ -147,8 +147,8 @@ function parseMetadata(
   const { title, topic, grade, subjectId, term, durationMinutes } = raw;
   if (typeof title !== 'string' || !title.trim()) return 'metadata.title is required';
   if (typeof topic !== 'string' || !topic.trim()) return 'metadata.topic is required';
-  if (typeof grade !== 'number' || grade < 8 || grade > 12)
-    return 'metadata.grade must be 8–12';
+  if (typeof grade !== 'number' || grade < 10 || grade > 12)
+    return 'metadata.grade must be 10–12';
   if (typeof subjectId !== 'string' || !subjectId)
     return 'metadata.subjectId is required';
   if (typeof term !== 'number' || term < 1 || term > 4)

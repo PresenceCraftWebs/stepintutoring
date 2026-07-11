@@ -3,20 +3,25 @@ import { Link } from 'react-router';
 import {
   getCareers,
   getCurriculum,
-  gradesWithContent,
   lessonById,
   lessonsFor,
-  subjectsForGrade,
 } from '@/content/curriculum';
-import type { Curriculum } from '@/content/types';
+import type { Curriculum, Subject } from '@/content/types';
+import { VALID_GRADES } from '@/content/types';
 import { progressStore } from '@/progress/IdbProgressStore';
 import type { LastViewed } from '@/progress/ProgressStore';
-import { getSelectedGrade, setSelectedGrade } from '@/lib/settings';
+import {
+  getSelectedGrade,
+  getSelectedSubjects,
+  setSelectedGrade,
+  setSelectedSubjects,
+} from '@/lib/settings';
 import { useAsync } from '@/lib/useAsync';
 import { useDownloads } from '@/downloads/useDownloads';
 import { formatBytes } from '@/lib/format';
 import {
   IconBriefcase,
+  IconCheck,
   IconChevronRight,
   IconDownload,
   IconPlay,
@@ -32,7 +37,9 @@ interface HomeData {
 
 export function HomePage() {
   const [grade, setGrade] = useState<number | null>(null);
-  const [gradeLoaded, setGradeLoaded] = useState(false);
+  const [subjects, setSubjects] = useState<string[] | null>(null);
+  const [editingSubjects, setEditingSubjects] = useState(false);
+  const [settingsLoaded, setSettingsLoaded] = useState(false);
   const downloads = useDownloads();
 
   const { value } = useAsync<HomeData>(async () => {
@@ -46,10 +53,13 @@ export function HomePage() {
   }, []);
 
   useEffect(() => {
-    void getSelectedGrade().then((g) => {
-      setGrade(g);
-      setGradeLoaded(true);
-    });
+    void Promise.all([getSelectedGrade(), getSelectedSubjects()]).then(
+      ([g, s]) => {
+        setGrade(g);
+        setSubjects(s);
+        setSettingsLoaded(true);
+      },
+    );
   }, []);
 
   const pickGrade = (g: number): void => {
@@ -57,21 +67,15 @@ export function HomePage() {
     void setSelectedGrade(g);
   };
 
-  if (!value || !gradeLoaded) {
+  if (!value || !settingsLoaded) {
     return <div className="p-8 text-center text-ink-faint">Loading…</div>;
   }
 
   const { curriculum, completed, lastViewed } = value;
-  const grades = gradesWithContent(curriculum);
+  const grades: readonly number[] = VALID_GRADES;
   const activeGrade = grade !== null && grades.includes(grade) ? grade : null;
-  const continueLesson = lastViewed
-    ? lessonById(curriculum, lastViewed.lessonId)
-    : undefined;
-  const downloadedCount = downloads.items.filter(
-    (i) => i.status === 'done',
-  ).length;
 
-  /* First run: pick a grade. */
+  /* Step 1: pick a grade (remembered). */
   if (activeGrade === null) {
     return (
       <div className="mx-auto flex min-h-[70dvh] w-full max-w-lg flex-col justify-center px-6">
@@ -83,13 +87,13 @@ export function HomePage() {
           We&apos;ll remember this — you can change it any time on the Home
           screen.
         </p>
-        <div className="mt-6 grid grid-cols-2 gap-3">
+        <div className="mt-6 grid grid-cols-3 gap-3">
           {grades.map((g) => (
             <button
               key={g}
               type="button"
               onClick={() => pickGrade(g)}
-              className="rounded-2xl border border-line bg-surface py-6 text-xl font-bold active:border-brand-700 active:bg-brand-50"
+              className="rounded-2xl border border-line bg-surface py-6 text-xl font-bold transition-colors hover:border-brand-500 hover:bg-brand-50 active:border-brand-700 active:bg-brand-50"
             >
               Grade {g}
             </button>
@@ -99,7 +103,30 @@ export function HomePage() {
     );
   }
 
-  const subjects = subjectsForGrade(curriculum, activeGrade);
+  /* Step 2: pick subjects (remembered, editable later). */
+  if (subjects === null || subjects.length === 0 || editingSubjects) {
+    return (
+      <SubjectPicker
+        allSubjects={curriculum.subjects}
+        initial={subjects ?? []}
+        onDone={(ids) => {
+          setSubjects(ids);
+          setEditingSubjects(false);
+          void setSelectedSubjects(ids);
+        }}
+      />
+    );
+  }
+
+  const mySubjects = curriculum.subjects.filter((s) =>
+    subjects.includes(s.id),
+  );
+  const continueLesson = lastViewed
+    ? lessonById(curriculum, lastViewed.lessonId)
+    : undefined;
+  const downloadedCount = downloads.items.filter(
+    (i) => i.status === 'done',
+  ).length;
 
   return (
     <div>
@@ -117,10 +144,10 @@ export function HomePage() {
                 key={g}
                 type="button"
                 onClick={() => pickGrade(g)}
-                className={`rounded-full px-3 py-1.5 text-sm font-bold ${
+                className={`rounded-full px-3 py-1.5 text-sm font-bold transition-colors ${
                   g === activeGrade
                     ? 'bg-brand-700 text-white'
-                    : 'text-ink-faint'
+                    : 'text-ink-faint hover:text-brand-700'
                 }`}
               >
                 Gr {g}
@@ -155,17 +182,26 @@ export function HomePage() {
           </Link>
         )}
 
-        {/* Subjects */}
+        {/* The student's chosen subjects */}
         <section>
-          <h2 className="mb-3 text-lg font-bold">Your subjects</h2>
-          {subjects.length === 0 ? (
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-lg font-bold">Your subjects</h2>
+            <button
+              type="button"
+              onClick={() => setEditingSubjects(true)}
+              className="text-sm font-bold text-brand-700 hover:underline"
+            >
+              Edit
+            </button>
+          </div>
+          {mySubjects.length === 0 ? (
             <EmptyState
-              title={`No Grade ${activeGrade} lessons yet`}
-              hint="Your tutors are adding content — check back soon."
+              title="No subjects chosen"
+              hint="Tap Edit to pick the subjects you take."
             />
           ) : (
             <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
-              {subjects.map((s) => {
+              {mySubjects.map((s) => {
                 const lessons = lessonsFor(curriculum, activeGrade, s.id);
                 const done = lessons.filter((l) => completed.has(l.id)).length;
                 return (
@@ -194,7 +230,9 @@ export function HomePage() {
                     </div>
                     <p className="mt-3 leading-tight font-bold">{s.name}</p>
                     <p className="mt-0.5 text-sm text-ink-faint">
-                      {lessons.length} lesson{lessons.length === 1 ? '' : 's'}
+                      {lessons.length === 0
+                        ? 'No lessons yet'
+                        : `${lessons.length} lesson${lessons.length === 1 ? '' : 's'}`}
                     </p>
                   </Link>
                 );
@@ -205,40 +243,39 @@ export function HomePage() {
 
         {/* Quick-access cards (side by side on desktop) */}
         <div className="grid gap-3 lg:grid-cols-2">
-        <Link
-          to="/downloads"
-          className="flex items-center gap-4 rounded-2xl border border-line bg-surface p-4 transition-colors hover:border-brand-200 hover:bg-brand-50 active:bg-brand-50"
-        >
-          <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700">
-            <IconDownload size={22} />
-          </span>
-          <span className="flex-1">
-            <span className="block font-bold">Downloads</span>
-            <span className="block text-sm text-ink-faint">
-              {downloadedCount === 0
-                ? 'Save lessons for offline — watch without data'
-                : `${downloadedCount} lesson${downloadedCount === 1 ? '' : 's'} · ${formatBytes(downloads.totalBytesUsed)} on this device`}
+          <Link
+            to="/downloads"
+            className="flex items-center gap-4 rounded-2xl border border-line bg-surface p-4 transition-colors hover:border-brand-200 hover:bg-brand-50 active:bg-brand-50"
+          >
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700">
+              <IconDownload size={22} />
             </span>
-          </span>
-          <IconChevronRight size={20} className="text-ink-faint" />
-        </Link>
+            <span className="flex-1">
+              <span className="block font-bold">Downloads</span>
+              <span className="block text-sm text-ink-faint">
+                {downloadedCount === 0
+                  ? 'Save lessons for offline — watch without data'
+                  : `${downloadedCount} lesson${downloadedCount === 1 ? '' : 's'} · ${formatBytes(downloads.totalBytesUsed)} on this device`}
+              </span>
+            </span>
+            <IconChevronRight size={20} className="text-ink-faint" />
+          </Link>
 
-        {/* Career corner */}
-        <Link
-          to="/careers"
-          className="flex items-center gap-4 rounded-2xl border border-line bg-surface p-4 transition-colors hover:border-brand-200 hover:bg-brand-50 active:bg-brand-50"
-        >
-          <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-amber-50 text-warn">
-            <IconBriefcase size={22} />
-          </span>
-          <span className="flex-1">
-            <span className="block font-bold">Career Corner</span>
-            <span className="block text-sm text-ink-faint">
-              Bursaries, study paths and exam tips from your tutors
+          <Link
+            to="/careers"
+            className="flex items-center gap-4 rounded-2xl border border-line bg-surface p-4 transition-colors hover:border-brand-200 hover:bg-brand-50 active:bg-brand-50"
+          >
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-amber-50 text-warn">
+              <IconBriefcase size={22} />
             </span>
-          </span>
-          <IconChevronRight size={20} className="text-ink-faint" />
-        </Link>
+            <span className="flex-1">
+              <span className="block font-bold">Career Corner</span>
+              <span className="block text-sm text-ink-faint">
+                Bursaries, study paths and exam tips from your tutors
+              </span>
+            </span>
+            <IconChevronRight size={20} className="text-ink-faint" />
+          </Link>
         </div>
 
         <Link
@@ -248,6 +285,81 @@ export function HomePage() {
           Tutor / admin tools
         </Link>
       </div>
+    </div>
+  );
+}
+
+/**
+ * Multi-select subject picker — same remember-once pattern as the grade
+ * picker. Shown on first run and via "Edit" on the Home screen.
+ */
+function SubjectPicker({
+  allSubjects,
+  initial,
+  onDone,
+}: {
+  allSubjects: Subject[];
+  initial: string[];
+  onDone: (ids: string[]) => void;
+}) {
+  const [picked, setPicked] = useState<string[]>(initial);
+
+  const toggle = (id: string): void =>
+    setPicked((p) =>
+      p.includes(id) ? p.filter((x) => x !== id) : [...p, id],
+    );
+
+  return (
+    <div className="mx-auto flex min-h-[70dvh] w-full max-w-lg flex-col justify-center px-6 py-10">
+      <p className="text-sm font-bold tracking-wide text-brand-700 uppercase">
+        Step-In Tutoring
+      </p>
+      <h1 className="mt-1 text-3xl font-bold">Which subjects do you take?</h1>
+      <p className="mt-2 text-ink-soft">
+        Pick your subject package — your Home screen shows only these. You can
+        change them any time with the Edit button.
+      </p>
+      <div className="mt-6 grid grid-cols-2 gap-3">
+        {allSubjects.map((s) => {
+          const active = picked.includes(s.id);
+          return (
+            <button
+              key={s.id}
+              type="button"
+              onClick={() => toggle(s.id)}
+              aria-pressed={active}
+              className={`flex items-center gap-3 rounded-2xl border p-3.5 text-left transition-colors ${
+                active
+                  ? 'border-brand-700 bg-brand-50'
+                  : 'border-line bg-surface hover:border-brand-300'
+              }`}
+            >
+              <SubjectIcon
+                icon={s.icon}
+                name={s.name}
+                color={s.color}
+                size={26}
+              />
+              <span className="min-w-0 flex-1 text-sm leading-tight font-bold">
+                {s.name}
+              </span>
+              {active && (
+                <IconCheck size={18} className="shrink-0 text-brand-700" />
+              )}
+            </button>
+          );
+        })}
+      </div>
+      <button
+        type="button"
+        disabled={picked.length === 0}
+        onClick={() => onDone(picked)}
+        className="mt-6 w-full rounded-full bg-brand-700 py-3.5 font-bold text-white transition-colors hover:bg-brand-800 disabled:opacity-40"
+      >
+        {picked.length === 0
+          ? 'Pick at least one subject'
+          : `Continue with ${picked.length} subject${picked.length === 1 ? '' : 's'}`}
+      </button>
     </div>
   );
 }

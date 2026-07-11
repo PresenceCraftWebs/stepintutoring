@@ -150,6 +150,34 @@ const SUBJECT_GLYPHS: Record<string, ReactNode> = {
       />
     </>
   ),
+  calculator: (
+    <path
+      d="M5 3h14v18H5Zm2.5 3.5h9M8 11h.01M12 11h.01M16 11h.01M8 14.5h.01M12 14.5h.01M16 14.5h.01M8 18h.01M12 18h.01M16 18h.01"
+      fill="none"
+      strokeWidth={2}
+    />
+  ),
+  briefcase: (
+    <path
+      d="M3 8.5h18v12H3Zm6 0V6a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 6v2.5M3 13.5h18"
+      fill="none"
+      strokeWidth={2}
+    />
+  ),
+  trend: (
+    <path
+      d="M3 20h18M4 16l5-5 3.5 3.5L19 8m0 0h-4.5M19 8v4.5"
+      fill="none"
+      strokeWidth={2}
+    />
+  ),
+  scroll: (
+    <path
+      d="M7 3h11a2 2 0 0 1 2 2v2h-4M7 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V5M7 3a2 2 0 0 1 2 2v2M9 12h6M9 16h6"
+      fill="none"
+      strokeWidth={2}
+    />
+  ),
 };
 
 /** Subject glyph in the subject's accent colour, with a letter fallback. */

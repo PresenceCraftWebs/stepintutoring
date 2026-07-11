@@ -6,7 +6,8 @@
 
 export type HostProvider = 'r2' | 'youtube';
 
-export const VALID_GRADES = [8, 9, 10, 11, 12] as const;
+/** FET phase only — Grades 10–12 (languages and Life Orientation excluded). */
+export const VALID_GRADES = [10, 11, 12] as const;
 export const VALID_TERMS = [1, 2, 3, 4] as const;
 export const VALID_TAGS = ['exam-prep', 'past-paper', 'revision'] as const;
 

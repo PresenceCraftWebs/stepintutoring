@@ -1,0 +1,59 @@
+# Grade 12 Mathematics — Term 1 (CAPS)
+# SEED DATA — see grade-10-mathematics-term-1.yml header for how seeds work.
+lessons:
+  - id: g12-math-t1-01
+    title: Arithmetic and geometric sequences
+    topic: Number Patterns, Sequences and Series
+    order: 1
+    hostProvider: r2
+    r2VideoKey: https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4
+    r2FileSizeBytes: 991017
+    durationMinutes: 18
+    tags: [exam-prep]
+    notes: |
+      ## What you will learn
+      Identifying arithmetic and geometric sequences, and using the general
+      term formulas to find any term.
+
+      ## Key points
+      - Arithmetic: constant difference $d$; $T_n = a + (n-1)d$.
+      - Geometric: constant ratio $r$; $T_n = ar^{n-1}$.
+      - Always test *both* patterns before deciding which one you have.
+  - id: g12-math-t1-02
+    title: "Functions: inverses and logarithms"
+    topic: Functions
+    order: 2
+    hostProvider: r2
+    r2VideoKey: https://test-videos.co.uk/vids/sintel/mp4/h264/360/Sintel_360_10s_5MB.mp4
+    r2FileSizeBytes: 5241895
+    durationMinutes: 20
+    tags: [exam-prep]
+    notes: |
+      ## What you will learn
+      Finding the inverse of a function, restricting domains so the inverse
+      is a function, and the log function as the inverse of the exponential.
+
+      ## Key points
+      - To find $f^{-1}$: swap $x$ and $y$, then solve for $y$.
+      - The graph of $f^{-1}$ is the reflection of $f$ in the line $y = x$.
+      - $y = \log_a x$ is the inverse of $y = a^x$.
+  - id: g12-math-t1-03
+    title: "Trigonometry: compound and double angles"
+    topic: Trigonometry
+    order: 3
+    hostProvider: youtube
+    youtubeId: eRsGyueVLvQ
+    durationMinutes: 16
+    tags: [past-paper]
+    notes: |
+      ## What you will learn
+      The compound-angle and double-angle identities, and using them to
+      simplify expressions and prove identities — a guaranteed exam question.
+
+      ## Key points
+      - $\sin(A \pm B) = \sin A\cos B \pm \cos A\sin B$
+      - $\cos(A \pm B) = \cos A\cos B \mp \sin A\sin B$
+      - $\sin 2A = 2\sin A\cos A$; know all three forms of $\cos 2A$.
+
+      > This lesson streams from YouTube, so it needs a data connection —
+      > it cannot be downloaded for offline viewing.
