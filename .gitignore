@@ -25,3 +25,7 @@ dist-ssr
 public/curriculum.json
 public/careers.json
 public/storage-manifest.json
+
+# Android release signing (never commit)
+android/keystore.properties
+*.keystore

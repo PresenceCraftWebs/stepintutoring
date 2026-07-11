@@ -1,0 +1,205 @@
+# Sveltia CMS configuration — the content editor at /admin.
+#
+# WIRING (2 values):
+#   backend.repo      your GitHub repo, e.g. step-in-tutoring/app
+#   backend.base_url  your deployed sveltia-cms-auth Worker URL
+#                     (https://github.com/sveltia/sveltia-cms-auth — one-click
+#                      deploy; steps in WIRING.md)
+
+backend:
+  name: github
+  repo: YOUR_GITHUB_OWNER/YOUR_REPO
+  branch: main
+  base_url: https://sveltia-cms-auth.YOUR-SUBDOMAIN.workers.dev
+
+media_folder: public/worksheets
+public_folder: /worksheets
+
+editor:
+  preview: false
+
+collections:
+  # ------------------------------------------------------------- lessons
+  # One file per (grade, subject, term). Lessons inside a file are a
+  # drag-and-drop list — drag to reorder, then update the "order" numbers to
+  # match (the app sorts by "order").
+  - name: lessons
+    label: Lessons (per grade · subject · term)
+    folder: content/lessons
+    extension: yml
+    format: yaml
+    create: true
+    slug: 'grade-{{fields.grade}}-{{fields.subject}}-term-{{fields.term}}'
+    identifier_field: grade
+    summary: '{{filename}}'
+    fields:
+      - name: grade
+        label: Grade (must match the file name)
+        widget: select
+        options: ['8', '9', '10', '11', '12']
+        hint: Only used when creating a new file — pick once, don't change.
+      - name: subject
+        label: Subject id (must match subjects)
+        widget: select
+        options:
+          - mathematics
+          - physical-sciences
+          - life-sciences
+          - english
+          - accounting
+          - geography
+      - name: term
+        label: Term
+        widget: select
+        options: ['1', '2', '3', '4']
+      - name: lessons
+        label: Lessons (drag to reorder)
+        label_singular: lesson
+        widget: list
+        collapsed: true
+        summary: '{{fields.order}} — {{fields.title}}'
+        fields:
+          - name: id
+            label: Lesson id (unique, never reuse)
+            widget: string
+            pattern:
+              - '^[a-z0-9-]+$'
+              - lowercase letters, numbers and dashes only
+            hint: 'e.g. g10-math-t1-05. Changing an id resets students'' progress for the lesson.'
+          - name: title
+            label: Title
+            widget: string
+          - name: topic
+            label: Topic
+            widget: string
+            hint: Lessons with the same topic are grouped on the subject page.
+          - name: order
+            label: Order within this term
+            widget: number
+            value_type: int
+          - name: hostProvider
+            label: Video host
+            widget: select
+            options:
+              - label: Cloudflare R2 (downloadable — default)
+                value: r2
+              - label: YouTube (stream-only overflow)
+                value: youtube
+          - name: r2VideoKey
+            label: R2 video key (r2 only)
+            widget: string
+            required: false
+            hint: 'Set automatically by the upload pipeline, e.g. videos/g10-….mp4. Leave empty for YouTube lessons.'
+          - name: r2FileSizeBytes
+            label: R2 file size in bytes (r2 only)
+            widget: number
+            value_type: int
+            required: false
+            hint: Also set automatically. Shown to students before they download.
+          - name: youtubeId
+            label: YouTube video id (youtube only)
+            widget: string
+            required: false
+            pattern:
+              - '^[A-Za-z0-9_-]{11}$|^$'
+              - the 11-character id from the video URL (after watch?v=)
+          - name: durationMinutes
+            label: Length (minutes)
+            widget: number
+            value_type: int
+          - name: notes
+            label: Study notes (Markdown)
+            widget: markdown
+            required: false
+          - name: worksheet
+            label: Worksheet PDF
+            widget: file
+            required: false
+          - name: tags
+            label: Tags
+            widget: select
+            multiple: true
+            required: false
+            options:
+              - label: Exam prep
+                value: exam-prep
+              - label: Past paper
+                value: past-paper
+              - label: Revision
+                value: revision
+          - name: videoRemoved
+            label: 'Video removed (needs attention)'
+            widget: boolean
+            required: false
+            hint: Set automatically when an admin deletes the R2 video. Untick after re-uploading or adding a youtubeId.
+
+  # ------------------------------------------------------------ subjects
+  - name: settings
+    label: Subjects & storage
+    files:
+      - name: subjects
+        label: Subjects
+        file: content/subjects.json
+        fields:
+          - name: subjects
+            label: Subjects
+            label_singular: subject
+            widget: list
+            root: true # the JSON file is the array itself
+            summary: '{{fields.name}}'
+            fields:
+              - name: id
+                label: Id (used in file names — don't change later)
+                widget: string
+                pattern:
+                  - '^[a-z0-9-]+$'
+                  - lowercase letters, numbers and dashes only
+              - name: name
+                label: Name
+                widget: string
+              - name: icon
+                label: Icon
+                widget: select
+                options: [sigma, atom, leaf, book, ledger, globe]
+              - name: color
+                label: Accent colour
+                widget: color
+      - name: storage
+        label: Storage manifest (managed by the pipeline)
+        file: content/storage-manifest.json
+        fields:
+          - name: totalBytesUsed
+            label: Total bytes used (auto-updated — edit only to correct drift)
+            widget: number
+            value_type: int
+          - name: softCapBytes
+            label: Soft cap in bytes (9000000000 = 9 GB of the 10 GB free tier)
+            widget: number
+            value_type: int
+          - name: lastUpdated
+            label: Last updated
+            widget: string
+
+  # ------------------------------------------------------------- careers
+  - name: careers
+    label: Career Corner articles
+    folder: content/careers
+    extension: md
+    format: frontmatter
+    create: true
+    slug: '{{slug}}'
+    summary: '{{title}}'
+    fields:
+      - name: title
+        label: Title
+        widget: string
+      - name: summary
+        label: One-line summary (shown in the list)
+        widget: string
+      - name: order
+        label: Order
+        widget: number
+        value_type: int
+      - name: body
+        label: Article (Markdown)
+        widget: markdown
