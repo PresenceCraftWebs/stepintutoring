@@ -100,6 +100,12 @@ export function HomePage() {
             </button>
           ))}
         </div>
+        <Link
+          to="/admin-tools/upload"
+          className="mt-8 self-center text-xs font-bold text-ink-faint hover:text-brand-700"
+        >
+          I&apos;m a tutor / admin
+        </Link>
       </div>
     );
   }
@@ -372,6 +378,12 @@ function SubjectPicker({
           ? 'Pick at least one subject'
           : `Continue with ${picked.length} subject${picked.length === 1 ? '' : 's'}`}
       </button>
+      <Link
+        to="/admin-tools/upload"
+        className="mt-5 self-center text-xs font-bold text-ink-faint hover:text-brand-700"
+      >
+        I&apos;m a tutor / admin
+      </Link>
     </div>
   );
 }

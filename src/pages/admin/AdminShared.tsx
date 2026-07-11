@@ -2,32 +2,113 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { NavLink } from 'react-router';
 import type { Subject } from '@/content/types';
 import { VALID_GRADES, VALID_TAGS, VALID_TERMS } from '@/content/types';
-import { getAdminKey, setAdminKey } from '@/lib/settings';
+import { verifyAdminKey } from '@/lib/adminApi';
+import { getAdminKey, removeAdminKey, setAdminKey } from '@/lib/settings';
+import { IconSpinner } from '@/lib/icons';
 
 /*
- * Shared pieces for the two in-app admin screens. These tools are for the
- * NGO's admin only — students never need them (the entry link is a small
- * text link on Home). Real protection is server-side: every Worker call
- * requires the X-Admin-Key secret; this gate just stores that key.
+ * Shared pieces for the two in-app admin screens. The Worker enforces the
+ * X-Admin-Key secret on every call; this gate additionally VERIFIES a key
+ * against the Worker (GET /auth-check) before storing it, so a wrong key is
+ * rejected at the door rather than failing later on the first real action.
  */
 
-export function AdminGate({ children }: { children: ReactNode }) {
-  const [key, setKey] = useState<string | null>(null);
-  const [draft, setDraft] = useState('');
-  const [loaded, setLoaded] = useState(false);
+type GateState =
+  | { step: 'loading' }
+  | { step: 'need-key'; error?: string }
+  | { step: 'verifying' }
+  | { step: 'unconfigured' }
+  | { step: 'ready' };
 
+export function AdminGate({ children }: { children: ReactNode }) {
+  const [state, setState] = useState<GateState>({ step: 'loading' });
+  const [draft, setDraft] = useState('');
+
+  // Re-verify the stored key on mount — a stale/revoked key must not pass.
   useEffect(() => {
-    void getAdminKey().then((k) => {
-      setKey(k);
-      setLoaded(true);
-    });
+    let cancelled = false;
+    void (async () => {
+      const stored = await getAdminKey();
+      if (!stored) {
+        const probe = await verifyAdminKey('');
+        if (!cancelled) {
+          setState(
+            probe === 'unconfigured'
+              ? { step: 'unconfigured' }
+              : { step: 'need-key' },
+          );
+        }
+        return;
+      }
+      const result = await verifyAdminKey(stored);
+      if (cancelled) return;
+      if (result === 'ok') setState({ step: 'ready' });
+      else if (result === 'unconfigured') setState({ step: 'unconfigured' });
+      else if (result === 'unauthorized') {
+        await removeAdminKey();
+        setState({
+          step: 'need-key',
+          error:
+            'The key saved on this device is no longer valid — enter the current one.',
+        });
+      } else {
+        setState({
+          step: 'need-key',
+          error:
+            "Couldn't reach the admin service to check your key — check your connection and try again.",
+        });
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  if (!loaded) {
+  const submit = async (): Promise<void> => {
+    const candidate = draft.trim();
+    setState({ step: 'verifying' });
+    const result = await verifyAdminKey(candidate);
+    if (result === 'ok') {
+      await setAdminKey(candidate);
+      setState({ step: 'ready' });
+    } else if (result === 'unauthorized') {
+      setState({
+        step: 'need-key',
+        error:
+          "That key is wrong — it doesn't match the one set on the server. Check with your technical contact.",
+      });
+    } else if (result === 'unconfigured') {
+      setState({ step: 'unconfigured' });
+    } else {
+      setState({
+        step: 'need-key',
+        error:
+          "Couldn't reach the admin service — check your connection and try again.",
+      });
+    }
+  };
+
+  if (state.step === 'loading') {
     return <div className="p-8 text-center text-ink-faint">Loading…</div>;
   }
 
-  if (!key) {
+  if (state.step === 'unconfigured') {
+    return (
+      <div className="rounded-2xl border border-line bg-surface p-5">
+        <h2 className="font-bold">Admin tools not wired up yet</h2>
+        <p className="mt-1 text-sm text-ink-soft">
+          The admin Worker URL (<code>VITE_WORKER_URL</code>) isn&apos;t
+          configured in this build, so uploads, deletion and key verification
+          can&apos;t work. Follow WIRING.md steps 3 and 5, rebuild, and this
+          screen unlocks. Lesson metadata can still be edited at{' '}
+          <code>/admin</code> (the CMS) in the meantime.
+        </p>
+      </div>
+    );
+  }
+
+  if (state.step === 'need-key' || state.step === 'verifying') {
+    const verifying = state.step === 'verifying';
     return (
       <div className="rounded-2xl border border-line bg-surface p-5">
         <h2 className="font-bold">Admin access</h2>
@@ -41,17 +122,27 @@ export function AdminGate({ children }: { children: ReactNode }) {
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           placeholder="Admin key"
+          disabled={verifying}
           className="mt-3 w-full rounded-xl border border-line bg-paper px-4 py-3 outline-none focus:border-brand-500"
         />
+        {state.step === 'need-key' && state.error && (
+          <p className="mt-2 rounded-xl bg-red-50 px-4 py-2.5 text-sm font-bold text-danger">
+            {state.error}
+          </p>
+        )}
         <button
           type="button"
-          disabled={draft.trim().length < 8}
-          onClick={() => {
-            void setAdminKey(draft.trim()).then(() => setKey(draft.trim()));
-          }}
-          className="mt-3 w-full rounded-full bg-brand-700 py-3 font-bold text-white disabled:opacity-40"
+          disabled={verifying || draft.trim().length < 8}
+          onClick={() => void submit()}
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-brand-700 py-3 font-bold text-white transition-colors hover:bg-brand-800 disabled:opacity-40"
         >
-          Save key on this device
+          {verifying ? (
+            <>
+              <IconSpinner size={18} /> Checking key…
+            </>
+          ) : (
+            'Verify and save key'
+          )}
         </button>
       </div>
     );

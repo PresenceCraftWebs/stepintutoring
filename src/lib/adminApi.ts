@@ -67,6 +67,31 @@ async function call<T>(
   return data;
 }
 
+export type KeyCheckResult =
+  | 'ok'
+  | 'unauthorized'
+  | 'unreachable'
+  | 'unconfigured';
+
+/**
+ * Verify a candidate admin key against the Worker BEFORE storing it — the
+ * admin gate must not accept a key the server would reject.
+ */
+export async function verifyAdminKey(key: string): Promise<KeyCheckResult> {
+  if (!WORKER_URL) return 'unconfigured';
+  try {
+    const res = await fetch(`${WORKER_URL}/auth-check`, {
+      headers: { 'X-Admin-Key': key },
+      signal: AbortSignal.timeout(10_000),
+    });
+    if (res.ok) return 'ok';
+    if (res.status === 401) return 'unauthorized';
+    return 'unreachable';
+  } catch {
+    return 'unreachable';
+  }
+}
+
 export function requestUploadUrl(
   fileName: string,
   fileSizeBytes: number,

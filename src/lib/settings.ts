@@ -73,3 +73,7 @@ export async function getAdminKey(): Promise<string | null> {
 export async function setAdminKey(key: string): Promise<void> {
   await set(KEYS.adminKey, key);
 }
+
+export async function removeAdminKey(): Promise<void> {
+  await Preferences.remove({ key: KEYS.adminKey });
+}

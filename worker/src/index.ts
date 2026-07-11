@@ -3,6 +3,7 @@ import { AwsClient } from 'aws4fetch';
 /*
  * Step-In Tutoring admin Worker.
  *
+ *   GET    /auth-check       → 200 if the X-Admin-Key is correct (else 401)
  *   POST   /upload-url       → short-lived signed PUT URL into R2 incoming/
  *   POST   /upload-complete  → trigger the compress-video GitHub workflow
  *   DELETE /video            → delete an R2 object + flag its lesson in git
@@ -188,6 +189,11 @@ export default {
     }
     if (!(await isAuthorized(request, env))) {
       return error('Unauthorized — missing or wrong X-Admin-Key header', 401);
+    }
+
+    // Used by the app's admin gate to verify a key before storing it.
+    if (url.pathname === '/auth-check' && request.method === 'GET') {
+      return json({ ok: true });
     }
 
     try {
