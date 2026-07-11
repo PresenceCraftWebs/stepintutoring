@@ -21,8 +21,16 @@ import type {
 
 const CACHE_KEY = 'sit.curriculum.v1';
 const FETCH_TIMEOUT_MS = 8000;
+/**
+ * How long an in-memory curriculum stays fresh. After this, the next page
+ * navigation refetches — so newly published lessons appear without the
+ * student reloading or reinstalling anything. Refreshes are cheap: the
+ * browser revalidates with an ETag, so an unchanged curriculum is a 304.
+ */
+const STALE_AFTER_MS = 5 * 60 * 1000;
 
 let inFlight: Promise<Curriculum> | null = null;
+let fetchedAt = 0;
 
 async function fetchJson<T>(url: string): Promise<T> {
   const res = await fetch(url, {
@@ -67,8 +75,25 @@ async function load(): Promise<Curriculum> {
 }
 
 export function getCurriculum(): Promise<Curriculum> {
-  inFlight ??= load();
-  return inFlight;
+  if (inFlight && Date.now() - fetchedAt < STALE_AFTER_MS) {
+    return inFlight;
+  }
+  const previous = inFlight;
+  const next = load()
+    .then((c) => {
+      fetchedAt = Date.now();
+      return c;
+    })
+    .catch((e: unknown) => {
+      // A failed refresh must not break pages that had data before.
+      if (previous) {
+        inFlight = previous;
+        return previous;
+      }
+      throw e instanceof Error ? e : new Error(String(e));
+    });
+  inFlight = next;
+  return next;
 }
 
 export async function getCareers(): Promise<CareerArticle[]> {
