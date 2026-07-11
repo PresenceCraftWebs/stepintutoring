@@ -2,9 +2,8 @@
  * Runs inside the content-maintenance workflow. Two actions:
  *
  *   video-deleted       payload: { lessonId, r2VideoKey, freedBytes }
- *     Flags the lesson as videoRemoved (needs attention — re-upload or a
- *     YouTube id) instead of silently breaking it, and decrements the
- *     storage manifest.
+ *     Removes the lesson entry along with its deleted video — students never
+ *     see a broken lesson — and decrements the storage manifest.
  *
  *   add-youtube-lesson  payload: lesson metadata incl. youtubeId
  *     Appends a stream-only YouTube lesson (the overflow path used when R2
@@ -35,13 +34,11 @@ if (action === 'video-deleted') {
   let found = false;
   for (const path of allLessonFiles()) {
     const doc = loadLessonFile(path);
-    const lesson = doc.lessons.find((l) => l.id === lessonId);
-    if (!lesson) continue;
-    lesson.videoRemoved = true;
-    delete lesson.r2VideoKey;
-    delete lesson.r2FileSizeBytes;
+    const index = doc.lessons.findIndex((l) => l.id === lessonId);
+    if (index === -1) continue;
+    doc.lessons.splice(index, 1);
     saveLessonFile(path, doc);
-    console.log(`✔ Flagged ${lessonId} as videoRemoved in ${path}`);
+    console.log(`✔ Removed lesson ${lessonId} from ${path}`);
     found = true;
     break;
   }

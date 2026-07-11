@@ -88,14 +88,16 @@ are long finished.
 Open **Tutor / admin tools → Manage videos**. You'll see the storage bar and
 every R2-hosted lesson with its size.
 
-- Tap the bin icon → confirm. The video file is deleted from R2 immediately
+- Tap the bin icon → confirm. The video is deleted from storage immediately
   and the space is freed.
-- The **lesson is not deleted** — it moves to a "Needs attention" list and
-  shows as unavailable to students, with a friendly message. Fix it by
-  either re-uploading the video (Upload screen) or adding a YouTube id to
-  that lesson in the content editor at `/admin`.
+- **The lesson is deleted with it** — title, notes and all. It disappears
+  from students' apps within a few minutes, so nobody ever sees a broken
+  lesson. This cannot be undone, which is why golden rule #1 exists: keep
+  your raw recordings backed up. To bring a lesson back, upload the
+  recording again (or add it as a YouTube lesson).
 - Seed/sample lessons that came with the app say "sample URL (not in R2)" —
-  there's nothing to delete for those.
+  there's nothing to delete for those (remove them in the content editor at
+  `/admin` instead).
 
 ---
 
@@ -154,10 +156,11 @@ technical contact can correct it at `/admin` → *Subjects & storage* →
 *Storage manifest*.
 
 **I deleted a video by mistake.**
-The file itself is gone from R2, but nothing else broke: the lesson is
-sitting in "Needs attention". Re-upload the original recording (you kept a
-copy of raw footage, right? — always keep your recordings backed up, e.g. on
-a hard drive or Google Drive) and it's as if nothing happened.
+The lesson and its video are gone from the app — deletion is permanent.
+Re-upload the original recording through the Upload screen (you kept a copy
+of your raw footage, right? — always keep recordings backed up, e.g. on a
+hard drive or Google Drive) and fill in the details again; within about half
+an hour it's back as if nothing happened.
 
 ---
 

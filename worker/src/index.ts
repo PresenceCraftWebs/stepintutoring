@@ -305,8 +305,8 @@ async function handleUploadComplete(
 /**
  * (c) Admin-initiated deletion of an R2-hosted video. Deletes the object
  * immediately, then triggers the content-maintenance workflow to update
- * storage-manifest.json and flag the lesson as needing attention (so the
- * lesson entry is never silently broken).
+ * storage-manifest.json and remove the lesson entry — students never see a
+ * lesson whose video is gone.
  */
 async function handleDeleteVideo(request: Request, env: Env): Promise<Response> {
   const body = await readBody(request);
@@ -338,8 +338,8 @@ async function handleDeleteVideo(request: Request, env: Env): Promise<Response> 
     ok: true,
     freedBytes,
     message:
-      'Video deleted. The lesson is being flagged as "needs attention" — ' +
-      're-upload it or give it a YouTube link from the CMS.',
+      'Video deleted. The lesson is being removed from the app — it ' +
+      'disappears for students within a few minutes.',
   });
 }
 

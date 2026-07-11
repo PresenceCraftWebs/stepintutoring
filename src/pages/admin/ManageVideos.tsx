@@ -63,11 +63,14 @@ function ManageInner() {
         capBytes={manifest.softCapBytes}
       />
       <p className="px-1 text-sm text-ink-soft">
-        Deleting a video frees R2 space but does <strong>not</strong> delete
-        the lesson — it gets flagged &quot;needs attention&quot; until you
-        re-upload it or give it a YouTube link (via the CMS at /admin).
+        Deleting here removes the video from storage <strong>and</strong> the
+        lesson from the app, so students never see a broken lesson. Keep your
+        raw recording backed up — to bring a lesson back, upload it again (or
+        add it as a YouTube lesson).
       </p>
 
+      {/* Only appears if a lesson was flagged manually in the CMS
+          (videoRemoved: true) — normal deletion removes lessons outright. */}
       {needsAttention.length > 0 && (
         <section>
           <h2 className="mb-2 flex items-center gap-2 font-bold text-warn">
@@ -81,8 +84,9 @@ function ManageInner() {
               >
                 <p className="font-bold">{l.title}</p>
                 <p className="text-sm text-ink-soft">
-                  Grade {l.grade} · {l.topic} — video was deleted. Re-upload
-                  it, or add a youtubeId in the CMS.
+                  Grade {l.grade} · {l.topic} — marked as missing its video.
+                  Re-upload it, add a youtubeId in the CMS, or delete the
+                  entry there.
                 </p>
               </div>
             ))}
@@ -133,8 +137,9 @@ function ManageInner() {
                   {row.state === 'confirm' && (
                     <div className="mt-3 rounded-xl bg-red-50 p-3">
                       <p className="text-sm font-bold text-danger">
-                        Delete this video from R2? Students lose streaming and
-                        new downloads for it until it&apos;s re-hosted.
+                        Delete this lesson AND its video? It disappears from
+                        the app for students. Notes and details are deleted
+                        too — this can&apos;t be undone.
                       </p>
                       <div className="mt-2 flex gap-2">
                         <button
@@ -156,7 +161,7 @@ function ManageInner() {
                   )}
                   {row.state === 'deleted' && (
                     <p className="mt-2 text-sm font-bold text-good">
-                      {row.message ?? 'Deleted — lesson flagged.'}{' '}
+                      {row.message ?? 'Deleted — lesson removed.'}{' '}
                       <button
                         type="button"
                         className="underline"
