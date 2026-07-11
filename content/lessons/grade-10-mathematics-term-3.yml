@@ -1,0 +1,12 @@
+lessons:
+  - id: g10-mathematics-t4-e2e-curation-test-will-be-deleted-3nz4
+    title: E2E test renamed
+    topic: Curation Test
+    order: 1
+    hostProvider: youtube
+    youtubeId: aqz-KE-bpKQ
+    attribution: Blender Foundation
+    durationMinutes: 12
+    tags:
+      - revision
+    notes: moved
