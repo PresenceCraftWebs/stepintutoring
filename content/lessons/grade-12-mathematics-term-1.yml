@@ -58,3 +58,14 @@ lessons:
 
       > This lesson streams from YouTube, so it needs a data connection —
       > it cannot be downloaded for offline viewing.
+  - id: g12-mathematics-t1-calculus-optimization-problem-8r1d
+    title: Calculus, Optimization Problem
+    topic: Calculus
+    order: 4
+    hostProvider: youtube
+    youtubeId: LJvdx2Mrxx4
+    attribution: Math and Science Aid
+    durationMinutes: 23
+    tags:
+      - revision
+    notes: '# Cul'
