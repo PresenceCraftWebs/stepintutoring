@@ -103,3 +103,14 @@ lessons:
     tags:
       - revision
     notes: '# Culc'
+  - id: g10-mathematics-t1-upload-test-2-792z
+    title: Upload Test 2
+    topic: Tst
+    order: 7
+    hostProvider: r2
+    r2VideoKey: videos/g10-mathematics-t1-upload-test-2-792z.mp4
+    r2FileSizeBytes: 23293071
+    durationMinutes: 6
+    tags:
+      - revision
+    notes: '#'
