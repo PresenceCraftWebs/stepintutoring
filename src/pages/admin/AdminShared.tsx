@@ -76,7 +76,7 @@ export function AdminGate({ children }: { children: ReactNode }) {
       setState({
         step: 'need-key',
         error:
-          "That key is wrong — it doesn't match the one set on the server. Check with your technical contact.",
+          "That key is wrong — it doesn't match the one on file. Check with whoever manages your admin access.",
       });
     } else if (result === 'unconfigured') {
       setState({ step: 'unconfigured' });
@@ -96,13 +96,12 @@ export function AdminGate({ children }: { children: ReactNode }) {
   if (state.step === 'unconfigured') {
     return (
       <div className="rounded-2xl border border-line bg-surface p-5">
-        <h2 className="font-bold">Admin tools not wired up yet</h2>
+        <h2 className="font-bold">Admin tools aren&apos;t available yet</h2>
         <p className="mt-1 text-sm text-ink-soft">
-          The admin Worker URL (<code>VITE_WORKER_URL</code>) isn&apos;t
-          configured in this build, so uploads, deletion and key verification
-          can&apos;t work. Follow WIRING.md steps 3 and 5, rebuild, and this
-          screen unlocks. Lesson metadata can still be edited at{' '}
-          <code>/admin</code> (the CMS) in the meantime.
+          Video uploads, deletion and key verification aren&apos;t set up in
+          this build yet — contact your developer to finish the setup.
+          Lesson details can still be edited in the content editor at{' '}
+          <code>/admin</code> in the meantime.
         </p>
       </div>
     );
@@ -114,9 +113,8 @@ export function AdminGate({ children }: { children: ReactNode }) {
       <div className="rounded-2xl border border-line bg-surface p-5">
         <h2 className="font-bold">Admin access</h2>
         <p className="mt-1 text-sm text-ink-soft">
-          Paste the admin key for this app. It&apos;s the same value that was
-          set on the Cloudflare Worker (<code>ADMIN_KEY</code>) — ask the
-          person who set up the system, or see WIRING.md.
+          Enter the admin key for this app. Check with whoever manages your
+          admin access if you don&apos;t have it.
         </p>
         <div className="relative mt-3">
           <input
@@ -404,7 +402,7 @@ export function StorageBar({
   return (
     <div className="rounded-2xl border border-line bg-surface p-4">
       <div className="flex items-baseline justify-between">
-        <p className="font-bold">Video storage (Cloudflare R2)</p>
+        <p className="font-bold">Video storage</p>
         <p className="text-sm font-bold text-ink-faint">{pct}% of free space</p>
       </div>
       <div className="mt-2 h-3 overflow-hidden rounded-full bg-brand-50">

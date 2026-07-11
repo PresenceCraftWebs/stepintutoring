@@ -42,8 +42,8 @@ async function call<T>(
 ): Promise<T> {
   if (!WORKER_URL) {
     throw new AdminApiError(
-      'The admin Worker URL is not configured yet (VITE_WORKER_URL). ' +
-        'See WIRING.md — until then, use the CMS at /admin to edit content.',
+      'Admin tools are not set up in this build yet. Use the content ' +
+        'editor at /admin to edit content in the meantime.',
       0,
     );
   }
@@ -124,8 +124,8 @@ export function uploadRawVideo(
       else
         reject(
           new Error(
-            `Upload to R2 failed (HTTP ${xhr.status}). The signed URL may ` +
-              'have expired — try again.',
+            `Upload failed (HTTP ${xhr.status}). The upload link may have ` +
+              'expired — try again.',
           ),
         );
     };

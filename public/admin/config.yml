@@ -84,17 +84,17 @@ collections:
             label: Video host
             widget: select
             options:
-              - label: Cloudflare R2 (downloadable — default)
+              - label: Downloadable (default)
                 value: r2
-              - label: YouTube (stream-only overflow)
+              - label: YouTube (stream only)
                 value: youtube
           - name: r2VideoKey
-            label: R2 video key (r2 only)
+            label: Video file reference (downloadable lessons only)
             widget: string
             required: false
-            hint: 'Set automatically by the upload pipeline, e.g. videos/g10-….mp4. Leave empty for YouTube lessons.'
+            hint: 'Set automatically when a video is uploaded, e.g. videos/g10-….mp4. Leave empty for YouTube lessons.'
           - name: r2FileSizeBytes
-            label: R2 file size in bytes (r2 only)
+            label: Video file size in bytes (downloadable lessons only)
             widget: number
             value_type: int
             required: false
@@ -139,7 +139,7 @@ collections:
             label: 'Video removed (needs attention)'
             widget: boolean
             required: false
-            hint: Set automatically when an admin deletes the R2 video. Untick after re-uploading or adding a youtubeId.
+            hint: Set automatically when a video is deleted. Untick after re-uploading the video or adding a YouTube link.
 
   # ------------------------------------------------------------ subjects
   - name: settings
@@ -185,15 +185,15 @@ collections:
                 label: Accent colour
                 widget: color
       - name: storage
-        label: Storage manifest (managed by the pipeline)
+        label: Storage manifest (updated automatically)
         file: content/storage-manifest.json
         fields:
           - name: totalBytesUsed
-            label: Total bytes used (auto-updated — edit only to correct drift)
+            label: Total bytes used (updated automatically — only edit to fix a mismatch)
             widget: number
             value_type: int
           - name: softCapBytes
-            label: Soft cap in bytes (9000000000 = 9 GB of the 10 GB free tier)
+            label: Storage limit in bytes (9000000000 = 9 GB of the 10 GB available)
             widget: number
             value_type: int
           - name: lastUpdated

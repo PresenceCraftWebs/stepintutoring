@@ -309,7 +309,7 @@ function R2UploadForm({
   if (atCap) {
     return (
       <div className="rounded-2xl bg-amber-50 p-4 text-sm font-bold text-warn">
-        R2 storage is at its cap, so new uploads are paused. Add this one as a
+        Video storage is full, so new uploads are paused. Add this one as a
         YouTube lesson instead (our own videos go up as Unlisted), or free
         space in Manage lessons first.
       </div>
@@ -379,8 +379,8 @@ function R2UploadForm({
           <h2 className="font-bold">Upload a lesson video (downloadable)</h2>
           <p className="mt-1 text-sm text-ink-soft">
             For <strong>our own recordings</strong> that learners need
-            offline. Drop in the raw file — the pipeline compresses it to
-            ~480p automatically.
+            offline. Drop in the raw file — it&apos;s compressed to ~480p
+            automatically.
           </p>
         </>
       )}
@@ -467,9 +467,7 @@ function R2UploadForm({
         {busy ? (
           <>
             <IconSpinner size={18} />
-            {phase.step === 'finishing'
-              ? 'Starting the pipeline…'
-              : 'Uploading…'}
+            {phase.step === 'finishing' ? 'Processing…' : 'Uploading…'}
           </>
         ) : replaceLesson ? (
           'Upload and re-host this lesson'

@@ -100,9 +100,9 @@ function ManageInner() {
         <h2 className="mb-2 font-bold">All lessons ({lessons.length})</h2>
         <p className="mb-2 px-1 text-sm text-ink-soft">
           Edit any lesson&apos;s details (changing grade/subject/term moves it
-          to the right place). Deleting an R2 lesson also frees its stored
-          video; YouTube lessons just leave the app. Changes go live within a
-          few minutes.
+          to the right place). Deleting a downloadable lesson also frees its
+          stored video; YouTube lessons just leave the app. Changes go live
+          within a few minutes.
         </p>
         <div className="flex flex-col gap-2">
           {lessons.map((lesson) => (
@@ -143,7 +143,7 @@ function RequestsPanel({
         Learners asked for these offline
       </h2>
       <p className="mb-2 px-1 text-sm text-ink-soft">
-        Re-host a lesson on R2 only if it&apos;s <strong>our own
+        Make a lesson downloadable only if it&apos;s <strong>our own
         recording</strong> — never download someone else&apos;s YouTube video.
         For public videos, record our own version or dismiss the request.
       </p>
@@ -174,7 +174,7 @@ function RequestsPanel({
                   to={`/admin-tools/upload?replace=${lessonId}`}
                   className="rounded-full bg-brand-700 px-4 py-2 text-sm font-bold text-white"
                 >
-                  Re-host on R2
+                  Make downloadable
                 </Link>
               )}
               <button
