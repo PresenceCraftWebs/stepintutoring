@@ -1,0 +1,121 @@
+# Compression pipeline: raw upload in R2 incoming/ → compressed lesson video.
+#
+# Triggered by the admin Worker (workflow_dispatch) after a raw video finishes
+# uploading. Steps:
+#   1. pull the raw file from R2 (aws-cli against R2's S3-compatible endpoint)
+#   2. compress with ffmpeg (~480p, ~40–70 MB per 15 min of lecture content)
+#   3. generate the lesson entry + update content/storage-manifest.json
+#   4. upload the compressed file to R2 videos/
+#   5. validate all content, commit, push (push also triggers the Cloudflare
+#      Pages rebuild, which is how the lesson reaches students)
+#   6. delete the raw file from incoming/ to reclaim space
+#
+# REQUIRED REPO SECRETS (Settings → Secrets and variables → Actions):
+#   R2_ACCOUNT_ID          Cloudflare account id
+#   R2_ACCESS_KEY_ID       R2 API token key id     ("Object Read & Write")
+#   R2_SECRET_ACCESS_KEY   R2 API token secret
+#   R2_BUCKET_NAME         e.g. sit-videos
+name: Compress video
+
+on:
+  workflow_dispatch:
+    inputs:
+      object_key:
+        description: "R2 key of the raw upload (incoming/...)"
+        required: true
+        type: string
+      metadata_json:
+        description: "Lesson metadata as a JSON string (from the Worker)"
+        required: true
+        type: string
+
+# Serialize every workflow that writes content/ — two uploads at the same
+# time must not race on storage-manifest.json or the lesson files.
+concurrency:
+  group: content-writes
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+  AWS_DEFAULT_REGION: auto
+  R2_ENDPOINT: https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
+  BUCKET: ${{ secrets.R2_BUCKET_NAME }}
+
+jobs:
+  compress:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120 # long raw videos take a while to compress
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies (for pipeline scripts + validation)
+        run: npm ci
+
+      - name: Install ffmpeg
+        run: sudo apt-get update -q && sudo apt-get install -y -q ffmpeg
+
+      - name: Download raw video from R2 incoming/
+        run: |
+          aws s3 cp "s3://$BUCKET/${{ inputs.object_key }}" raw-input \
+            --endpoint-url "$R2_ENDPOINT" --no-progress
+
+      # COMPRESSION PRESET (documented):
+      #   480p H.264, CRF 27 with a 550 kbps cap, slow preset for efficiency,
+      #   64 kbps mono AAC (voice), +faststart so the file streams
+      #   progressively (moov atom up front).
+      #   Worst case ≈ (550+64) kbps ≈ 69 MB / 15 min; slide-heavy lecture
+      #   content typically lands at 40–60 MB / 15 min.
+      - name: Compress with ffmpeg (~480p lecture preset)
+        run: |
+          ffmpeg -hide_banner -y -i raw-input \
+            -vf "scale=-2:480" -r 30 \
+            -c:v libx264 -preset slow -crf 27 -maxrate 550k -bufsize 1500k \
+            -c:a aac -b:a 64k -ac 1 \
+            -movflags +faststart \
+            compressed.mp4
+          ls -la compressed.mp4
+
+      - name: Create lesson entry + update storage manifest
+        id: lesson
+        env:
+          METADATA_JSON: ${{ inputs.metadata_json }}
+        run: |
+          SIZE_BYTES=$(stat -c%s compressed.mp4) \
+            node scripts/pipeline/add-lesson.mjs
+
+      - name: Upload compressed video to R2 videos/
+        run: |
+          aws s3 cp compressed.mp4 \
+            "s3://$BUCKET/${{ steps.lesson.outputs.video_key }}" \
+            --endpoint-url "$R2_ENDPOINT" --no-progress \
+            --content-type video/mp4
+
+      # If a CMS edit or this script ever produces invalid content, fail HERE,
+      # before anything is committed.
+      - name: Validate content
+        run: npm run build:content
+
+      - name: Commit and push lesson metadata
+        run: |
+          git config user.name "content-pipeline[bot]"
+          git config user.email "content-pipeline@users.noreply.github.com"
+          git add content/
+          git commit -m "Add lesson: ${{ steps.lesson.outputs.lesson_id }} (via upload pipeline)"
+          # Rebase in case another content commit landed while we compressed.
+          git pull --rebase origin ${{ github.ref_name }}
+          git push origin HEAD:${{ github.ref_name }}
+
+      - name: Delete raw file from incoming/
+        run: |
+          aws s3 rm "s3://$BUCKET/${{ inputs.object_key }}" \
+            --endpoint-url "$R2_ENDPOINT"

@@ -1,0 +1,69 @@
+# Content maintenance: small git writes triggered by the admin Worker.
+#
+#   action = video-deleted       flag a lesson whose R2 video was deleted
+#                                (needs attention) + shrink the manifest
+#   action = add-youtube-lesson  commit a stream-only YouTube overflow lesson
+#
+# All repo writes live in Actions (this file + compress-video.yml) so the
+# Worker never has to reimplement git. Pushing also triggers the Cloudflare
+# Pages rebuild that ships the change to students.
+#
+# No secrets needed beyond the default GITHUB_TOKEN.
+name: Content maintenance
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "video-deleted | add-youtube-lesson"
+        required: true
+        type: string
+      payload_json:
+        description: "Action payload as a JSON string (from the Worker)"
+        required: true
+        type: string
+
+concurrency:
+  group: content-writes
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  maintain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Apply content change
+        env:
+          ACTION: ${{ inputs.action }}
+          PAYLOAD_JSON: ${{ inputs.payload_json }}
+        run: node scripts/pipeline/maintenance.mjs
+
+      - name: Validate content
+        run: npm run build:content
+
+      - name: Commit and push
+        run: |
+          git config user.name "content-pipeline[bot]"
+          git config user.email "content-pipeline@users.noreply.github.com"
+          git add content/
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+            exit 0
+          fi
+          git commit -m "Content maintenance: ${{ inputs.action }}"
+          git pull --rebase origin ${{ github.ref_name }}
+          git push origin HEAD:${{ github.ref_name }}

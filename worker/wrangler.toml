@@ -1,0 +1,33 @@
+# Cloudflare Worker: Step-In Tutoring admin API.
+# Deploy:  cd worker && npm install && npx wrangler deploy
+# Secrets: npx wrangler secret put <NAME>   (see the list below + WIRING.md)
+
+name = "sit-admin"
+main = "src/index.ts"
+compatibility_date = "2026-06-01"
+
+# WIRING: replace with your R2 bucket name (created in the Cloudflare
+# dashboard or via `npx wrangler r2 bucket create sit-videos`).
+[[r2_buckets]]
+binding = "VIDEOS"
+bucket_name = "sit-videos"
+
+[vars]
+# WIRING: your Cloudflare account id (dashboard → right sidebar).
+R2_ACCOUNT_ID = "YOUR_CLOUDFLARE_ACCOUNT_ID"
+# Must match [[r2_buckets]].bucket_name above.
+R2_BUCKET_NAME = "sit-videos"
+# WIRING: the GitHub repo that holds this project, e.g. "step-in-tutoring/app".
+GITHUB_REPO = "YOUR_GITHUB_OWNER/YOUR_REPO"
+GITHUB_BRANCH = "main"
+
+# ---------------------------------------------------------------------------
+# Secrets — set each one with:  npx wrangler secret put <NAME>
+#
+#   ADMIN_KEY             shared secret the admin app sends as X-Admin-Key.
+#                         Generate one: openssl rand -hex 24
+#   R2_ACCESS_KEY_ID      R2 API token key id   (dashboard → R2 → API tokens,
+#   R2_SECRET_ACCESS_KEY  R2 API token secret    "Object Read & Write")
+#   GITHUB_TOKEN          fine-grained PAT with Actions read/write on the repo
+#                         (used only to trigger workflow_dispatch)
+# ---------------------------------------------------------------------------
