@@ -238,6 +238,25 @@ export function IconFileText(props: IconProps) {
   );
 }
 
+export function IconEye(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
+
+export function IconEyeOff(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M4 4l16 16" />
+      <path d="M10.6 6c.45-.07.92-.1 1.4-.1 6 0 9.5 6.1 9.5 6.1a17.5 17.5 0 0 1-2.8 3.5M6.3 6.9A17 17 0 0 0 2.5 12S6 18.1 12 18.1c1.2 0 2.3-.24 3.3-.63" />
+      <path d="M9.9 10.1a3 3 0 0 0 4.1 4.3" />
+    </svg>
+  );
+}
+
 export function IconSpinner(props: IconProps) {
   return (
     <svg {...base(props)} className={`animate-spin ${props.className ?? ''}`}>

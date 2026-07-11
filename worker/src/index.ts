@@ -72,14 +72,16 @@ async function sha256Hex(text: string): Promise<string> {
     .join('');
 }
 
-/** Constant-time-ish comparison via digest equality. */
+/**
+ * Constant-time-ish comparison via digest equality. Both sides are trimmed:
+ * `echo key | wrangler secret put ADMIN_KEY` stores a trailing newline, which
+ * would otherwise make the exact right key fail forever.
+ */
 async function isAuthorized(request: Request, env: Env): Promise<boolean> {
-  const provided = request.headers.get('X-Admin-Key');
-  if (!provided || !env.ADMIN_KEY) return false;
-  const [a, b] = await Promise.all([
-    sha256Hex(provided),
-    sha256Hex(env.ADMIN_KEY),
-  ]);
+  const provided = request.headers.get('X-Admin-Key')?.trim();
+  const expected = env.ADMIN_KEY?.trim();
+  if (!provided || !expected) return false;
+  const [a, b] = await Promise.all([sha256Hex(provided), sha256Hex(expected)]);
   return a === b;
 }
 

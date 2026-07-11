@@ -4,7 +4,7 @@ import type { Subject } from '@/content/types';
 import { VALID_GRADES, VALID_TAGS, VALID_TERMS } from '@/content/types';
 import { verifyAdminKey } from '@/lib/adminApi';
 import { getAdminKey, removeAdminKey, setAdminKey } from '@/lib/settings';
-import { IconSpinner } from '@/lib/icons';
+import { IconEye, IconEyeOff, IconSpinner } from '@/lib/icons';
 
 /*
  * Shared pieces for the two in-app admin screens. The Worker enforces the
@@ -23,6 +23,7 @@ type GateState =
 export function AdminGate({ children }: { children: ReactNode }) {
   const [state, setState] = useState<GateState>({ step: 'loading' });
   const [draft, setDraft] = useState('');
+  const [showKey, setShowKey] = useState(false);
 
   // Re-verify the stored key on mount — a stale/revoked key must not pass.
   useEffect(() => {
@@ -117,14 +118,27 @@ export function AdminGate({ children }: { children: ReactNode }) {
           set on the Cloudflare Worker (<code>ADMIN_KEY</code>) — ask the
           person who set up the system, or see WIRING.md.
         </p>
-        <input
-          type="password"
-          value={draft}
-          onChange={(e) => setDraft(e.target.value)}
-          placeholder="Admin key"
-          disabled={verifying}
-          className="mt-3 w-full rounded-xl border border-line bg-paper px-4 py-3 outline-none focus:border-brand-500"
-        />
+        <div className="relative mt-3">
+          <input
+            type={showKey ? 'text' : 'password'}
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            placeholder="Admin key"
+            disabled={verifying}
+            autoCapitalize="off"
+            autoCorrect="off"
+            spellCheck={false}
+            className="w-full rounded-xl border border-line bg-paper py-3 pr-12 pl-4 outline-none focus:border-brand-500"
+          />
+          <button
+            type="button"
+            onClick={() => setShowKey((s) => !s)}
+            aria-label={showKey ? 'Hide key' : 'Show key'}
+            className="absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-1.5 text-ink-faint transition-colors hover:text-brand-700"
+          >
+            {showKey ? <IconEyeOff size={20} /> : <IconEye size={20} />}
+          </button>
+        </div>
         {state.step === 'need-key' && state.error && (
           <p className="mt-2 rounded-xl bg-red-50 px-4 py-2.5 text-sm font-bold text-danger">
             {state.error}
