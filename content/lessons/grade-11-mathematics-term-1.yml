@@ -6,8 +6,8 @@ lessons:
     topic: Exponents and Surds
     order: 1
     hostProvider: r2
-    r2VideoKey: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4
-    r2FileSizeBytes: 3400000
+    r2VideoKey: https://test-videos.co.uk/vids/sintel/mp4/h264/360/Sintel_360_10s_2MB.mp4
+    r2FileSizeBytes: 2096692
     durationMinutes: 16
     tags: [exam-prep]
     notes: |
@@ -25,8 +25,8 @@ lessons:
     topic: Equations and Inequalities
     order: 2
     hostProvider: r2
-    r2VideoKey: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4
-    r2FileSizeBytes: 4500000
+    r2VideoKey: https://test-videos.co.uk/vids/jellyfish/mp4/h264/360/Jellyfish_360_10s_2MB.mp4
+    r2FileSizeBytes: 2095805
     durationMinutes: 18
     tags: [past-paper]
     worksheet: /worksheets/g11-math-t1-02.pdf

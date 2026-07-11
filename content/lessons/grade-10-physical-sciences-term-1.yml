@@ -6,8 +6,8 @@ lessons:
     topic: Matter and Classification
     order: 1
     hostProvider: r2
-    r2VideoKey: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4
-    r2FileSizeBytes: 2500000
+    r2VideoKey: https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4
+    r2FileSizeBytes: 1128375
     durationMinutes: 13
     tags: []
     notes: |
@@ -24,8 +24,8 @@ lessons:
     topic: States of Matter
     order: 2
     hostProvider: r2
-    r2VideoKey: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4
-    r2FileSizeBytes: 2300000
+    r2VideoKey: https://test-videos.co.uk/vids/jellyfish/mp4/h264/360/Jellyfish_360_10s_5MB.mp4
+    r2FileSizeBytes: 5242707
     durationMinutes: 15
     tags: [revision]
     notes: |
@@ -44,8 +44,8 @@ lessons:
     topic: The Atom
     order: 3
     hostProvider: r2
-    r2VideoKey: https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4
-    r2FileSizeBytes: 6300000
+    r2VideoKey: https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4
+    r2FileSizeBytes: 991017
     durationMinutes: 19
     tags: [exam-prep]
     notes: |

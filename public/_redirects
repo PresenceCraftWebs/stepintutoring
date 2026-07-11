@@ -1,0 +1,3 @@
+# Cloudflare Pages: serve the SPA for all app routes (deep links like
+# /lesson/<id> must load index.html). Static assets are matched first.
+/*  /index.html  200
