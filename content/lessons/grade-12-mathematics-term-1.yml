@@ -58,13 +58,3 @@ lessons:
 
       > This lesson streams from YouTube, so it needs a data connection —
       > it cannot be downloaded for offline viewing.
-  - id: g12-mathematics-t1-test-2-gbac
-    title: Test 2
-    topic: Test
-    order: 4
-    hostProvider: r2
-    durationMinutes: 6
-    tags:
-      - revision
-    notes: '# Test'
-    videoRemoved: true
