@@ -1,11 +1,3 @@
-# Grade 10 Mathematics — Term 1 (CAPS)
-#
-# SEED DATA: r2VideoKey values below are full URLs pointing at small,
-# openly-licensed sample MP4s (Google/Blender demo clips) so the whole
-# streaming + download flow can be tested before R2 is wired in.
-# Real lessons produced by the upload pipeline use object keys like
-# "videos/<lesson-id>.mp4" instead — see WIRING.md ("Pointing at real content").
-# r2FileSizeBytes values for seeds are approximate.
 lessons:
   - id: g10-math-t1-01
     title: Simplifying algebraic expressions
@@ -31,14 +23,15 @@ lessons:
       Try questions 1–6 on the worksheet. Mark your own work with the memo on
       the last page.
   - id: g10-math-t1-02
-    title: "Factorising: common factor and difference of squares"
+    title: 'Factorising: common factor and difference of squares'
     topic: Algebraic Expressions
     order: 2
     hostProvider: r2
     r2VideoKey: https://test-videos.co.uk/vids/sintel/mp4/h264/360/Sintel_360_10s_2MB.mp4
     r2FileSizeBytes: 2096692
     durationMinutes: 16
-    tags: [revision]
+    tags:
+      - revision
     notes: |
       ## What you will learn
       The first two factorising tools you need for the whole of FET maths:
@@ -57,7 +50,8 @@ lessons:
     r2VideoKey: https://test-videos.co.uk/vids/jellyfish/mp4/h264/360/Jellyfish_360_10s_2MB.mp4
     r2FileSizeBytes: 2095805
     durationMinutes: 18
-    tags: [revision]
+    tags:
+      - revision
     notes: |
       ## What you will learn
       The five exponent laws, with worked examples of simplifying expressions
@@ -87,3 +81,14 @@ lessons:
 
       > This lesson streams from YouTube, so it needs a data connection —
       > it cannot be downloaded for offline viewing.
+  - id: g10-mathematics-t1-test-video-1-68c0
+    title: Test Video 1
+    topic: Test
+    order: 5
+    hostProvider: r2
+    r2VideoKey: videos/g10-mathematics-t1-test-video-1-68c0.mp4
+    r2FileSizeBytes: 229458
+    durationMinutes: 1
+    tags:
+      - revision
+    notes: ''
