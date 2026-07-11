@@ -92,3 +92,14 @@ lessons:
     tags:
       - revision
     notes: ''
+  - id: g10-mathematics-t1-calculus-optimization-problem-6hck
+    title: Calculus, Optimization Problem
+    topic: Culc
+    order: 6
+    hostProvider: youtube
+    youtubeId: qEfckCGs_hg
+    attribution: Calculus, Optimization Problem
+    durationMinutes: 21
+    tags:
+      - revision
+    notes: '# Culc'
