@@ -8,24 +8,68 @@ person who set up the system (there's a Troubleshooting section at the end).
 
 ## The one-minute overview
 
-- Lesson **videos** live in cloud storage called **R2**. We get about
-  **10 GB free** — roughly **150–250 lessons**. Lessons stored here can be
-  **downloaded by students and watched offline**, which is the whole point of
-  the app.
-- When R2 gets close to full, new lessons go to **YouTube (Unlisted)**
-  instead. YouTube lessons **stream online only** — students can't download
-  them. That's the trade-off, and it's why R2 is the default.
-- Lesson **details** (titles, notes, order) live in a content editor at
-  **`/admin`** on the app's website.
-- The **in-app admin tools** (open the app → scroll to the bottom of Home →
-  "Tutor / admin tools") are where you upload videos and manage storage.
+- **Start on YouTube.** Lots of excellent CAPS-aligned lessons already exist
+  on public channels — curate those instead of re-recording (credit the
+  channel in the Attribution box). Our own recordings also go on YouTube by
+  default, as **Unlisted** uploads. YouTube lessons stream online only.
+- **Upload to R2 when offline matters.** R2 is our cloud storage (about
+  **10 GB free** ≈ 150–250 lessons). R2 lessons can be **downloaded and
+  watched offline** — reserve that space for our own recordings that
+  learners really need offline.
+- **Learners tell you what they need.** A "Request offline version" button
+  on YouTube lessons feeds a counter you'll see in **Manage lessons** — use
+  it to decide what earns R2 space.
+- Lesson **details** are editable in the app (Manage lessons → Edit) or in
+  the content editor at **`/admin`** on the website.
+- The **in-app admin tools** (Home → "Tutor / admin tools") are where you
+  add lessons, edit them, and manage storage.
+
+**⚠️ The copyright rule (please never break it):** only **our own
+recordings** may be uploaded to R2. Other people's YouTube videos are used
+by *embedding* only — that's what YouTube allows. Never download someone
+else's video and re-upload it, to R2 or anywhere. If learners request an
+offline version of a public video: record our own version of that lesson, or
+let it stay online-only.
 
 You'll need the **admin key** the first time you open the in-app tools — ask
 your technical contact for it. Enter it once per device; it's remembered.
 
 ---
 
-## Adding a lesson the normal way (R2)
+## Adding a lesson from YouTube (the usual way)
+
+1. Find the video: a good public lesson (search YouTube for the CAPS topic +
+   grade — channels like Mindset run full curricula), or upload our own
+   recording at **studio.youtube.com** with visibility **Unlisted**
+   (⚠️ not Private — Private won't play in the app).
+2. In the app: **Tutor / admin tools → Add lesson → From YouTube** (the
+   default tab).
+3. Paste the video **link** (the whole URL is fine — the app finds the id).
+4. Public video? Put the channel name in **Attribution** — it shows as
+   "Video: … (YouTube)" under the player. Our own video? Leave it empty.
+5. Fill in the lesson details and submit. Live in a few minutes.
+
+## Offline requests: hearing your learners
+
+YouTube lessons show learners a **"Request offline version"** button. Each
+tap adds to a counter you'll see at the top of **Manage lessons**, sorted by
+demand. For each requested lesson you can:
+
+- **Re-host on R2** (only offered for our own videos): jumps to the upload
+  form pre-filled — upload our raw recording and the lesson becomes
+  downloadable *in place*, keeping learners' progress.
+- **Dismiss**: clears the counter (e.g. it's someone else's video and we're
+  not recording our own version yet).
+
+## Editing a lesson after it's published
+
+**Manage lessons → Edit** on any lesson: change the title, topic, grade,
+subject, term, length, tags, notes — and for YouTube lessons the video link
+and attribution. Moving a lesson to another grade/subject/term is fine; it
+slots in at the end of that term's list. Changes go live within a few
+minutes. (The lesson's *id* never changes, so learner progress is safe.)
+
+## Uploading a video to R2 (downloadable lessons)
 
 **What to record/export:** the *raw* video — the file exactly as it comes
 from your camera, phone, or screen recorder. Don't compress it, convert it,
@@ -38,10 +82,10 @@ recordings, and shorter videos are cheaper for them to download.
 
 **Steps:**
 
-1. Open the app → Home → **Tutor / admin tools** → **Upload video**.
+1. Open the app → Home → **Tutor / admin tools** → **Add lesson** → the
+   **"Upload video (downloadable)"** tab.
 2. Check the storage bar at the top. Green/under ~80%: carry on. If it's
-   full, the screen will switch to the YouTube path automatically (see
-   below).
+   full, uploads pause — free space in Manage lessons or use YouTube.
 3. Choose the raw video file (or drag it in, on a computer).
 4. Fill in the lesson details — title, topic (use the same topic names as
    the CAPS curriculum so lessons group nicely), grade, subject, term,
@@ -58,10 +102,11 @@ app automatically; students don't need to reinstall anything.
 
 ---
 
-## When R2 is full: the YouTube path
+## When R2 is full
 
-When the storage bar reaches the cap, the Upload screen changes and asks you
-to use YouTube instead:
+When the storage bar reaches the cap, R2 uploads pause. Free space in
+Manage lessons (delete old downloadable lessons — consider re-adding them as
+YouTube lessons first), or simply keep adding lessons via the YouTube tab:
 
 1. Go to **studio.youtube.com** (sign in with the org's YouTube account).
 2. Upload the video there.

@@ -101,6 +101,7 @@ interface LessonOut {
   r2VideoKey?: string;
   r2FileSizeBytes?: number;
   youtubeId?: string;
+  attribution?: string;
   durationMinutes: number;
   notes: string;
   worksheet?: string;
@@ -216,6 +217,12 @@ function readLessons(subjectIds: Set<string>): LessonOut[] {
           `lesson "${id}"`,
           `"tags" may only contain: ${VALID_TAGS.join(', ')}`,
         );
+
+      if (l.attribution !== undefined) {
+        if (typeof l.attribution === 'string' && l.attribution)
+          lesson.attribution = l.attribution;
+        else fail(`lesson "${id}"`, '"attribution" must be a non-empty string');
+      }
 
       if (l.videoRemoved !== undefined) {
         if (typeof l.videoRemoved === 'boolean')

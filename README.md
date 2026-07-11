@@ -14,8 +14,12 @@ Student device (Capacitor app, Android first; web build for everyone else)
    ├─ IndexedDB (idb)            local progress, streaks (no accounts)
    └─ Foreground download queue  Wi-Fi-only / charging-only conditions
         │
-Cloudflare R2        primary video host (default for every lesson)
-Cloudflare Worker    signed upload URLs · delete · triggers workflows   (worker/)
+YouTube (embeds)     default lesson tier — curated public videos (with
+                     attribution) + the org's own Unlisted uploads
+Cloudflare R2        downloadable tier: the org's OWN recordings that need
+                     offline access (learners request these in-app)
+Cloudflare Worker    signed uploads · lesson edit/delete · offline-request
+                     counters (KV) · triggers workflows              (worker/)
 GitHub Actions       ffmpeg compression pipeline · content commits     (.github/workflows/)
 YouTube (Unlisted)   manual overflow once R2 nears its free cap
 GitHub repo          lesson metadata + storage manifest, edited via Sveltia CMS at /admin

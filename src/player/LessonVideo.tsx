@@ -7,6 +7,7 @@ import { R2Player } from './R2Player';
 import { YouTubePlayer } from './YouTubePlayer';
 import { PlayerError } from './PlayerError';
 import { CompletionOverlay } from './CompletionOverlay';
+import { OfflineRequestButton } from './OfflineRequestButton';
 
 /**
  * The full video area for a lesson: routes to the right player (local file →
@@ -72,10 +73,18 @@ export function LessonVideo({
         </p>
       )}
       {source.kind === 'youtube' && (
-        <p className="mt-2 flex items-center gap-1.5 px-4 text-sm font-bold text-ink-faint md:px-0">
-          <IconGlobe size={16} />
-          Streams online only — this lesson can&apos;t be downloaded.
-        </p>
+        <>
+          <p className="mt-2 flex items-center gap-1.5 px-4 text-sm font-bold text-ink-faint md:px-0">
+            <IconGlobe size={16} />
+            Streams online only — this lesson can&apos;t be downloaded.
+          </p>
+          {lesson.attribution && (
+            <p className="mt-1 px-4 text-sm text-ink-faint md:px-0">
+              Video: {lesson.attribution} (YouTube)
+            </p>
+          )}
+          <OfflineRequestButton lessonId={lesson.id} />
+        </>
       )}
     </div>
   );

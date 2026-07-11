@@ -216,6 +216,29 @@ export function emptyMetadata(subjects: Subject[]): MetadataDraft {
   };
 }
 
+/** Prefill a draft from an existing lesson (edit / re-host flows). */
+export function draftFromLesson(lesson: {
+  title: string;
+  topic: string;
+  grade: number;
+  subjectId: string;
+  term: number;
+  durationMinutes: number;
+  notes: string;
+  tags: readonly string[];
+}): MetadataDraft {
+  return {
+    title: lesson.title,
+    topic: lesson.topic,
+    grade: lesson.grade,
+    subjectId: lesson.subjectId,
+    term: lesson.term,
+    durationMinutes: String(lesson.durationMinutes),
+    notes: lesson.notes,
+    tags: [...lesson.tags],
+  };
+}
+
 export function metadataProblems(d: MetadataDraft): string | null {
   if (!d.title.trim()) return 'Give the lesson a title.';
   if (!d.topic.trim()) return 'Fill in the topic (as used in class).';

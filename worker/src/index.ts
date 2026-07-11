@@ -6,8 +6,16 @@ import { AwsClient } from 'aws4fetch';
  *   GET    /auth-check       → 200 if the X-Admin-Key is correct (else 401)
  *   POST   /upload-url       → short-lived signed PUT URL into R2 incoming/
  *   POST   /upload-complete  → trigger the compress-video GitHub workflow
- *   DELETE /video            → delete an R2 object + flag its lesson in git
+ *                              (optional replaceLessonId: convert an existing
+ *                               lesson to R2 in place, keeping its id)
+ *   DELETE /video            → delete an R2 object + remove its lesson in git
  *   POST   /overflow-lesson  → commit a YouTube-hosted lesson via git workflow
+ *   POST   /update-lesson    → edit lesson fields after publish (via git)
+ *   DELETE /lesson           → remove a YouTube-tier lesson entry (via git)
+ *   GET    /offline-requests → learner "need offline" counts     (admin)
+ *   DELETE /offline-request  → clear one lesson's counter        (admin)
+ *   POST   /offline-request  → PUBLIC: learner marks a lesson as needed
+ *                              offline; counts stored in KV
  *   GET    /health           → unauthenticated liveness check
  *
  * AUTH: every mutating endpoint requires the X-Admin-Key header to match the
@@ -23,6 +31,7 @@ import { AwsClient } from 'aws4fetch';
 
 export interface Env {
   VIDEOS: R2Bucket;
+  OFFLINE_REQUESTS: KVNamespace;
   R2_ACCOUNT_ID: string;
   R2_BUCKET_NAME: string;
   GITHUB_REPO: string;
@@ -140,7 +149,10 @@ interface LessonMetadata {
   notes: string;
   tags: string[];
   youtubeId?: string;
+  attribution?: string;
 }
+
+const LESSON_ID_RE = /^[a-z0-9-]{1,80}$/;
 
 function parseMetadata(
   raw: unknown,
@@ -162,6 +174,10 @@ function parseMetadata(
     typeof raw.youtubeId === 'string' ? raw.youtubeId : undefined;
   if (requireYoutubeId && !/^[A-Za-z0-9_-]{11}$/.test(youtubeId ?? ''))
     return 'metadata.youtubeId must be an 11-character YouTube video id';
+  const attribution =
+    typeof raw.attribution === 'string' && raw.attribution.trim()
+      ? raw.attribution.trim()
+      : undefined;
   return {
     title: title.trim(),
     topic: topic.trim(),
@@ -174,6 +190,7 @@ function parseMetadata(
       ? raw.tags.filter((t): t is string => typeof t === 'string')
       : [],
     youtubeId,
+    attribution,
   };
 }
 
@@ -188,6 +205,12 @@ export default {
     }
     if (url.pathname === '/health') {
       return json({ ok: true });
+    }
+    // PUBLIC endpoint — learners have no admin key. Abuse surface is one
+    // KV counter write; malformed ids are rejected and unknown ids are
+    // simply never shown (the admin screen joins against the curriculum).
+    if (url.pathname === '/offline-request' && request.method === 'POST') {
+      return await handleOfflineRequest(request, env);
     }
     if (!(await isAuthorized(request, env))) {
       return error('Unauthorized — missing or wrong X-Admin-Key header', 401);
@@ -210,6 +233,18 @@ export default {
       }
       if (url.pathname === '/overflow-lesson' && request.method === 'POST') {
         return await handleOverflowLesson(request, env);
+      }
+      if (url.pathname === '/update-lesson' && request.method === 'POST') {
+        return await handleUpdateLesson(request, env);
+      }
+      if (url.pathname === '/lesson' && request.method === 'DELETE') {
+        return await handleDeleteLesson(request, env);
+      }
+      if (url.pathname === '/offline-requests' && request.method === 'GET') {
+        return await handleListOfflineRequests(env);
+      }
+      if (url.pathname === '/offline-request' && request.method === 'DELETE') {
+        return await handleDismissOfflineRequest(request, env);
       }
     } catch (e) {
       console.error('Unhandled worker error', e);
@@ -289,9 +324,20 @@ async function handleUploadComplete(
     );
   }
 
+  // Optional: convert an existing lesson (usually YouTube-tier) to R2 in
+  // place — same id, so learner progress and links survive.
+  const replaceLessonId =
+    typeof body.replaceLessonId === 'string' && body.replaceLessonId
+      ? body.replaceLessonId
+      : '';
+  if (replaceLessonId && !LESSON_ID_RE.test(replaceLessonId)) {
+    return error('replaceLessonId is not a valid lesson id', 400);
+  }
+
   const failure = await dispatchWorkflow(env, 'compress-video.yml', {
     object_key: objectKey,
     metadata_json: JSON.stringify(meta),
+    replace_lesson_id: replaceLessonId,
   });
   if (failure) return failure;
   return json({
@@ -343,8 +389,110 @@ async function handleDeleteVideo(request: Request, env: Env): Promise<Response> 
   });
 }
 
+/** Learner-facing: bump a lesson's "needed offline" counter in KV. */
+async function handleOfflineRequest(
+  request: Request,
+  env: Env,
+): Promise<Response> {
+  const body = await readBody(request);
+  const lessonId = body.lessonId;
+  if (typeof lessonId !== 'string' || !LESSON_ID_RE.test(lessonId)) {
+    return error('lessonId is required', 400);
+  }
+  const key = `req:${lessonId}`;
+  // Read-increment-write; concurrent requests may lose a count, which is
+  // fine — this is a priority signal, not accounting.
+  const current = Number((await env.OFFLINE_REQUESTS.get(key)) ?? '0');
+  await env.OFFLINE_REQUESTS.put(key, String(current + 1));
+  return json({ ok: true });
+}
+
+/** Admin: all request counters, highest first. */
+async function handleListOfflineRequests(env: Env): Promise<Response> {
+  const list = await env.OFFLINE_REQUESTS.list({ prefix: 'req:' });
+  const requests: { lessonId: string; count: number }[] = [];
+  for (const k of list.keys) {
+    const count = Number((await env.OFFLINE_REQUESTS.get(k.name)) ?? '0');
+    if (count > 0) {
+      requests.push({ lessonId: k.name.slice('req:'.length), count });
+    }
+  }
+  requests.sort((a, b) => b.count - a.count);
+  return json({ requests });
+}
+
+/** Admin: clear a counter (request handled or dismissed). */
+async function handleDismissOfflineRequest(
+  request: Request,
+  env: Env,
+): Promise<Response> {
+  const body = await readBody(request);
+  const lessonId = body.lessonId;
+  if (typeof lessonId !== 'string' || !LESSON_ID_RE.test(lessonId)) {
+    return error('lessonId is required', 400);
+  }
+  await env.OFFLINE_REQUESTS.delete(`req:${lessonId}`);
+  return json({ ok: true });
+}
+
 /**
- * (d) YouTube overflow path: no file involved — just commit the lesson
+ * Edit lesson fields after publish. Changing grade/subject/term moves the
+ * lesson to the right content file (handled by the maintenance script).
+ */
+async function handleUpdateLesson(
+  request: Request,
+  env: Env,
+): Promise<Response> {
+  const body = await readBody(request);
+  const lessonId = body.lessonId;
+  if (typeof lessonId !== 'string' || !LESSON_ID_RE.test(lessonId)) {
+    return error('lessonId is required', 400);
+  }
+  const meta = parseMetadata(body.metadata, { requireYoutubeId: false });
+  if (typeof meta === 'string') return error(meta, 400);
+  if (meta.youtubeId && !/^[A-Za-z0-9_-]{11}$/.test(meta.youtubeId)) {
+    return error('youtubeId must be an 11-character YouTube video id', 400);
+  }
+
+  const failure = await dispatchWorkflow(env, 'content-maintenance.yml', {
+    action: 'update-lesson',
+    payload_json: JSON.stringify({ lessonId, fields: meta }),
+  });
+  if (failure) return failure;
+  return json({
+    ok: true,
+    message: 'Saved — the change goes live within a few minutes.',
+  });
+}
+
+/**
+ * Remove a YouTube-tier lesson entry. R2-tier lessons must go through
+ * DELETE /video instead (which also frees the stored file); the maintenance
+ * script enforces this too.
+ */
+async function handleDeleteLesson(
+  request: Request,
+  env: Env,
+): Promise<Response> {
+  const body = await readBody(request);
+  const lessonId = body.lessonId;
+  if (typeof lessonId !== 'string' || !LESSON_ID_RE.test(lessonId)) {
+    return error('lessonId is required', 400);
+  }
+  const failure = await dispatchWorkflow(env, 'content-maintenance.yml', {
+    action: 'delete-lesson',
+    payload_json: JSON.stringify({ lessonId }),
+  });
+  if (failure) return failure;
+  return json({
+    ok: true,
+    message:
+      'Lesson removed — it disappears for students within a few minutes.',
+  });
+}
+
+/**
+ * (d) YouTube path: no file involved — just commit the lesson
  * metadata (with youtubeId) via the content-maintenance workflow.
  */
 async function handleOverflowLesson(

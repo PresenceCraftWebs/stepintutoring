@@ -12,6 +12,13 @@ compatibility_date = "2026-06-01"
 binding = "VIDEOS"
 bucket_name = "sit-videos"
 
+# Learner "request offline" counters (no accounts, no DB — one small counter
+# per lesson). WIRING: create with `npx wrangler kv namespace create
+# OFFLINE_REQUESTS` and paste the id it prints here.
+[[kv_namespaces]]
+binding = "OFFLINE_REQUESTS"
+id = "f7dc7c70bdfe4b61b4016328dbc8cad9"
+
 [vars]
 # WIRING: your Cloudflare account id (dashboard → right sidebar).
 R2_ACCOUNT_ID = "f107d75265c540e47458872c4d865cca"

@@ -40,6 +40,12 @@ export interface Lesson {
   r2FileSizeBytes?: number;
   /** YouTube video id (11 chars) when hostProvider is 'youtube'. */
   youtubeId?: string;
+  /**
+   * Credit line for curated public YouTube videos ("Video: Mindset Learn").
+   * Presence implies the video isn't the org's own; own recordings and
+   * unlisted uploads leave it empty.
+   */
+  attribution?: string;
   durationMinutes: number;
   /** Markdown study notes shown under the player. */
   notes: string;

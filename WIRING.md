@@ -96,6 +96,18 @@ variables → Actions → New repository secret):
    Note the deployed URL, e.g. `https://sit-admin.YOUR-SUBDOMAIN.workers.dev`.
    Check it's alive: `curl https://…workers.dev/health` → `{"ok":true}`.
 
+### 3b. KV namespace (learner offline-request counters)
+
+One-time, from `worker/`:
+
+```bash
+npx wrangler kv namespace create OFFLINE_REQUESTS
+```
+
+Paste the printed `id` into the `[[kv_namespaces]]` block in
+`worker/wrangler.toml`, then redeploy the Worker. (Free tier: 1,000 writes
+per day — far more request taps than a small org will ever see.)
+
 ## 4. Cloudflare Pages (web build + content refresh for the APK)
 
 1. Dashboard → **Workers & Pages → Create → Pages → Connect to Git** → pick

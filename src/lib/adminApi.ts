@@ -23,6 +23,7 @@ export interface LessonMetadataInput {
   notes: string;
   tags: string[];
   youtubeId?: string;
+  attribution?: string;
 }
 
 class AdminApiError extends Error {
@@ -137,8 +138,13 @@ export function uploadRawVideo(
 export function notifyUploadComplete(
   objectKey: string,
   metadata: LessonMetadataInput,
+  replaceLessonId?: string,
 ): Promise<{ ok: boolean; message: string }> {
-  return call('/upload-complete', 'POST', { objectKey, metadata });
+  return call('/upload-complete', 'POST', {
+    objectKey,
+    metadata,
+    replaceLessonId,
+  });
 }
 
 export function deleteVideo(
@@ -148,8 +154,51 @@ export function deleteVideo(
   return call('/video', 'DELETE', { lessonId, r2VideoKey });
 }
 
-export function addOverflowLesson(
+export function addYoutubeLesson(
   metadata: LessonMetadataInput,
 ): Promise<{ ok: boolean; message: string }> {
   return call('/overflow-lesson', 'POST', { metadata });
+}
+
+export function updateLesson(
+  lessonId: string,
+  metadata: LessonMetadataInput,
+): Promise<{ ok: boolean; message: string }> {
+  return call('/update-lesson', 'POST', { lessonId, metadata });
+}
+
+/** Remove a YouTube-tier lesson entry (R2 lessons go through deleteVideo). */
+export function deleteYoutubeLesson(
+  lessonId: string,
+): Promise<{ ok: boolean; message: string }> {
+  return call('/lesson', 'DELETE', { lessonId });
+}
+
+export interface OfflineRequest {
+  lessonId: string;
+  count: number;
+}
+
+export function getOfflineRequests(): Promise<{ requests: OfflineRequest[] }> {
+  return call('/offline-requests', 'GET', undefined);
+}
+
+export function dismissOfflineRequest(
+  lessonId: string,
+): Promise<{ ok: boolean }> {
+  return call('/offline-request', 'DELETE', { lessonId });
+}
+
+/**
+ * PUBLIC (learner) call — no admin key. Marks a lesson as "needed offline"
+ * so admins can prioritise re-hosting it on R2.
+ */
+export async function requestOfflineVersion(lessonId: string): Promise<void> {
+  if (!WORKER_URL) throw new Error('Not available in this build.');
+  const res = await fetch(`${WORKER_URL}/offline-request`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ lessonId }),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
 }

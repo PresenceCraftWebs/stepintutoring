@@ -15,6 +15,23 @@ export function lessonFilePath(grade, subjectId, term) {
   return join(LESSONS_DIR, `grade-${grade}-${subjectId}-term-${term}.yml`);
 }
 
+/** Parse grade/subjectId/term back out of a lesson file path. */
+export function parseLessonFilePath(path) {
+  const m = /grade-(\d+)-([a-z0-9-]+?)-term-(\d)\.yml$/.exec(path);
+  if (!m) return null;
+  return { grade: Number(m[1]), subjectId: m[2], term: Number(m[3]) };
+}
+
+/** Find the file containing a lesson id → { path, doc, index } or null. */
+export function findLesson(lessonId) {
+  for (const path of allLessonFiles()) {
+    const doc = loadLessonFile(path);
+    const index = doc.lessons.findIndex((l) => l.id === lessonId);
+    if (index !== -1) return { path, doc, index };
+  }
+  return null;
+}
+
 export function loadLessonFile(path) {
   if (!existsSync(path)) return { lessons: [] };
   const doc = yamlLoad(readFileSync(path, 'utf8'));

@@ -28,6 +28,11 @@ on:
         description: "Lesson metadata as a JSON string (from the Worker)"
         required: true
         type: string
+      replace_lesson_id:
+        description: "Optional: existing lesson id to convert to R2 in place"
+        required: false
+        type: string
+        default: ""
 
 # Serialize every workflow that writes content/ — two uploads at the same
 # time must not race on storage-manifest.json or the lesson files.
@@ -89,6 +94,7 @@ jobs:
         id: lesson
         env:
           METADATA_JSON: ${{ inputs.metadata_json }}
+          REPLACE_LESSON_ID: ${{ inputs.replace_lesson_id }}
         run: |
           SIZE_BYTES=$(stat -c%s compressed.mp4) \
             node scripts/pipeline/add-lesson.mjs
