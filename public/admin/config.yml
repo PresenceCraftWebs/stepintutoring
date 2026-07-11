@@ -8,9 +8,9 @@
 
 backend:
   name: github
-  repo: YOUR_GITHUB_OWNER/YOUR_REPO
+  repo: PresenceCraftWebs/stepintutoring
   branch: main
-  base_url: https://sveltia-cms-auth.YOUR-SUBDOMAIN.workers.dev
+  base_url: https://sveltia-cms-auth.nduvho-ramashia.workers.dev
 
 media_folder: public/worksheets
 public_folder: /worksheets

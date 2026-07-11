@@ -14,7 +14,7 @@ bucket_name = "sit-videos"
 
 [vars]
 # WIRING: your Cloudflare account id (dashboard → right sidebar).
-R2_ACCOUNT_ID = "YOUR_CLOUDFLARE_ACCOUNT_ID"
+R2_ACCOUNT_ID = "f107d75265c540e47458872c4d865cca"
 # Must match [[r2_buckets]].bucket_name above.
 R2_BUCKET_NAME = "sit-videos"
 # WIRING: the GitHub repo that holds this project, e.g. "step-in-tutoring/app".
