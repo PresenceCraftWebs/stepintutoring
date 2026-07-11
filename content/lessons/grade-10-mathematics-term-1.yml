@@ -81,17 +81,6 @@ lessons:
 
       > This lesson streams from YouTube, so it needs a data connection —
       > it cannot be downloaded for offline viewing.
-  - id: g10-mathematics-t1-test-video-1-68c0
-    title: Test Video 1
-    topic: Test
-    order: 5
-    hostProvider: r2
-    r2VideoKey: videos/g10-mathematics-t1-test-video-1-68c0.mp4
-    r2FileSizeBytes: 229458
-    durationMinutes: 1
-    tags:
-      - revision
-    notes: ''
   - id: g10-mathematics-t1-calculus-optimization-problem-6hck
     title: Calculus, Optimization Problem
     topic: Culc
