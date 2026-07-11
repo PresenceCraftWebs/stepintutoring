@@ -1,7 +1,7 @@
-# Step-In Tutoring
+# Step-In-Tutoring
 
 Offline-first tutoring app for South African high-school students
-(CAPS-aligned), built for [Step-In Tutoring](https://www.facebook.com/stepintutoringza/).
+(CAPS-aligned), built for [Step-In-Tutoring](https://www.facebook.com/stepintutoringza/).
 Every lesson video can be **streamed and downloaded for fully offline
 playback**; all infrastructure runs on free tiers; there is no database and
 there are no student accounts.

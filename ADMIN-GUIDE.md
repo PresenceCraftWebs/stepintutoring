@@ -1,4 +1,4 @@
-# Step-In Tutoring — Admin Guide
+# Step-In-Tutoring — Admin Guide
 
 This guide is for the person who adds lessons and looks after content. No
 technical background needed. If something here doesn't work, contact the

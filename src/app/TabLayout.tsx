@@ -51,8 +51,8 @@ export function TabLayout() {
         <div className="flex items-center gap-3 px-2">
           <BrandMark />
           <div className="leading-tight">
-            <p className="font-bold">Step-In Tutoring</p>
-            <p className="text-xs text-ink-faint">Learn. Step by step.</p>
+            <p className="font-bold">Step-In-Tutoring</p>
+            <p className="text-xs text-ink-faint">Empowering Knowledge</p>
           </div>
         </div>
 

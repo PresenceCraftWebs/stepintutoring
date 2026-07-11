@@ -80,9 +80,10 @@ export function HomePage() {
     return (
       <div className="mx-auto flex min-h-[70dvh] w-full max-w-lg flex-col justify-center px-6">
         <p className="text-sm font-bold tracking-wide text-brand-700 uppercase">
-          Step-In Tutoring
+          Step-In-Tutoring
         </p>
-        <h1 className="mt-1 text-3xl font-bold">Which grade are you in?</h1>
+        <p className="text-xs font-bold text-ink-faint">Empowering Knowledge</p>
+        <h1 className="mt-2 text-3xl font-bold">Which grade are you in?</h1>
         <p className="mt-2 text-ink-soft">
           We&apos;ll remember this — you can change it any time on the Home
           screen.
@@ -130,13 +131,18 @@ export function HomePage() {
 
   return (
     <div>
-      <header className="pt-safe px-4 pt-4 lg:px-0 lg:pt-8">
+      <header className="pt-safe px-4 pt-9 lg:px-0 lg:pt-12">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm font-bold tracking-wide text-brand-700 uppercase">
-              Step-In Tutoring
+              Step-In-Tutoring
             </p>
-            <h1 className="text-2xl font-bold">Hello! Ready to learn?</h1>
+            <p className="text-xs font-bold text-ink-faint">
+              Empowering Knowledge
+            </p>
+            <h1 className="mt-1.5 text-2xl font-bold">
+              Hello! Ready to learn?
+            </h1>
           </div>
           <div className="flex gap-1 rounded-full border border-line bg-surface p-1">
             {grades.map((g) => (
@@ -317,9 +323,10 @@ function SubjectPicker({
   return (
     <div className="mx-auto flex min-h-[70dvh] w-full max-w-lg flex-col justify-center px-6 py-10">
       <p className="text-sm font-bold tracking-wide text-brand-700 uppercase">
-        Step-In Tutoring
+        Step-In-Tutoring
       </p>
-      <h1 className="mt-1 text-3xl font-bold">Which subjects do you take?</h1>
+      <p className="text-xs font-bold text-ink-faint">Empowering Knowledge</p>
+      <h1 className="mt-2 text-3xl font-bold">Which subjects do you take?</h1>
       <p className="mt-2 text-ink-soft">
         Pick your subject package — your Home screen shows only these. You can
         change them any time with the Edit button.
