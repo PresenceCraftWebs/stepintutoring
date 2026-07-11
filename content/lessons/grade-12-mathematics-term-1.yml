@@ -63,9 +63,8 @@ lessons:
     topic: Test
     order: 4
     hostProvider: r2
-    r2VideoKey: videos/g12-mathematics-t1-test-2-gbac.mp4
-    r2FileSizeBytes: 20010181
     durationMinutes: 6
     tags:
       - revision
     notes: '# Test'
+    videoRemoved: true
