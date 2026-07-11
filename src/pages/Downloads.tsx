@@ -83,7 +83,7 @@ export function DownloadsPage() {
         </div>
 
         {/* Condition toggles */}
-        <section className="flex flex-col gap-2">
+        <section className="flex flex-col gap-2 lg:grid lg:grid-cols-2">
           <Toggle
             checked={wifiOnly}
             onChange={(v) => {
@@ -108,7 +108,7 @@ export function DownloadsPage() {
             }
             icon={<IconBattery size={22} />}
           />
-          <p className="px-1 text-xs text-ink-faint">
+          <p className="px-1 text-xs text-ink-faint lg:col-span-2">
             Downloads run while the app is open and pick up automatically when
             you come back. Queued items wait for the conditions above — there
             is no fixed download time.
@@ -119,7 +119,7 @@ export function DownloadsPage() {
         {active.length > 0 && (
           <section>
             <h2 className="mb-2 font-bold">Downloading</h2>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 lg:grid lg:grid-cols-2">
               {active.map((item) => (
                 <div
                   key={item.lessonId}
@@ -208,7 +208,7 @@ export function DownloadsPage() {
               hint="Open any lesson with a download button and save it — then watch with no data, anywhere."
             />
           ) : (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 lg:grid lg:grid-cols-2">
               {done.map((item) => (
                 <div
                   key={item.lessonId}

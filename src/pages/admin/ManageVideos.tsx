@@ -16,7 +16,7 @@ type RowState = 'idle' | 'confirm' | 'deleting' | 'deleted' | 'error';
 
 export function AdminManageVideosPage() {
   return (
-    <Screen title="Tutor / admin tools" back>
+    <Screen title="Tutor / admin tools" back narrow>
       <AdminTabs />
       <AdminGate>
         <ManageInner />

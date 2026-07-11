@@ -18,7 +18,7 @@ export function ProgressPage() {
   const started = stats.bySubject.filter((s) => s.completed > 0);
 
   return (
-    <Screen title="My Progress">
+    <Screen title="My Progress" narrow>
       <div className="flex flex-col gap-4">
         {/* Headline numbers */}
         <div className="grid grid-cols-2 gap-3">

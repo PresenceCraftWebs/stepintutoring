@@ -46,7 +46,7 @@ export function LessonPage() {
   const { prev, next } = lessonSiblings(curriculum, lesson);
 
   return (
-    <Screen title={lesson.title} back>
+    <Screen title={lesson.title} back narrow>
       <div className="-mx-4 md:mx-0">
         <LessonVideo lesson={lesson} nextLesson={next} />
       </div>

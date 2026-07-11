@@ -21,7 +21,7 @@ export function CareersPage() {
       {articles && articles.length === 0 && (
         <EmptyState title="No articles yet" hint="Check back soon." />
       )}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 lg:grid lg:grid-cols-2 lg:gap-3">
         {articles?.map((a) => (
           <CardLink key={a.slug} to={`/careers/${a.slug}`}>
             <span className="min-w-0 flex-1">

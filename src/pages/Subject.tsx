@@ -110,7 +110,7 @@ export function SubjectPage() {
           }
         />
       ) : (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 lg:grid lg:grid-cols-2">
           {topics.map(({ topic, lessons }) => {
             const done = lessons.filter((l) => completed.has(l.id)).length;
             const minutes = lessons.reduce(

@@ -2,29 +2,38 @@ import type { ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { IconArrowLeft } from '@/lib/icons';
 
-/** Standard page shell: sticky header with optional back button. */
+/**
+ * Standard page shell: sticky header with optional back button.
+ * `narrow` caps the content at a reading width on desktop (player pages,
+ * articles, admin forms); the default lets grids use the full column.
+ */
 export function Screen({
   title,
   back,
   children,
   actions,
+  narrow,
 }: {
   title: string;
   back?: boolean;
   actions?: ReactNode;
   children: ReactNode;
+  narrow?: boolean;
 }) {
   const navigate = useNavigate();
+  const cap = narrow ? 'lg:max-w-3xl' : '';
   return (
     <div>
       <header className="pt-safe sticky top-0 z-30 border-b border-line bg-paper/95 backdrop-blur">
-        <div className="flex min-h-14 items-center gap-2 px-4 py-2">
+        <div
+          className={`mx-auto flex min-h-14 items-center gap-2 px-4 py-2 lg:px-0 ${cap}`}
+        >
           {back && (
             <button
               type="button"
               onClick={() => void navigate(-1)}
               aria-label="Back"
-              className="-ml-2 rounded-full p-2 text-ink-soft active:bg-line"
+              className="-ml-2 rounded-full p-2 text-ink-soft transition-colors hover:bg-line active:bg-line"
             >
               <IconArrowLeft size={22} />
             </button>
@@ -33,7 +42,9 @@ export function Screen({
           {actions}
         </div>
       </header>
-      <div className="px-4 py-4">{children}</div>
+      <div className={`mx-auto px-4 py-4 lg:px-0 lg:py-6 ${cap}`}>
+        {children}
+      </div>
     </div>
   );
 }
@@ -209,10 +220,10 @@ export function Chip({
     <button
       type="button"
       onClick={onClick}
-      className={`shrink-0 rounded-full border px-3.5 py-1.5 text-sm font-bold ${
+      className={`shrink-0 rounded-full border px-3.5 py-1.5 text-sm font-bold transition-colors ${
         active
           ? 'border-brand-700 bg-brand-700 text-white'
-          : 'border-line bg-surface text-ink-soft'
+          : 'border-line bg-surface text-ink-soft hover:border-brand-300 hover:bg-brand-50'
       }`}
     >
       {children}
@@ -231,7 +242,7 @@ export function CardLink({
   return (
     <Link
       to={to}
-      className="flex items-center gap-3 rounded-2xl border border-line bg-surface p-4 active:bg-brand-50"
+      className="flex items-center gap-3 rounded-2xl border border-line bg-surface p-4 transition-colors hover:border-brand-200 hover:bg-brand-50 active:bg-brand-50"
     >
       {children}
     </Link>

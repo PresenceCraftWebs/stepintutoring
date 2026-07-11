@@ -52,7 +52,7 @@ export function TopicPage() {
   }
 
   return (
-    <Screen title={group.topic} back>
+    <Screen title={group.topic} back narrow>
       <p className="mb-4 text-sm text-ink-faint">
         {subject.name} · Grade {grade} · Term {term}
       </p>

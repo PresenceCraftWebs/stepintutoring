@@ -21,7 +21,7 @@ export function CareerArticlePage() {
   }
 
   return (
-    <Screen title={article.title} back>
+    <Screen title={article.title} back narrow>
       <article className="prose-notes rounded-2xl border border-line bg-surface p-5">
         <Markdown>{article.body}</Markdown>
       </article>

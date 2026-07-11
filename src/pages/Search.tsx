@@ -98,7 +98,7 @@ export function SearchPage() {
         ))}
       </div>
 
-      <div className="mt-4 flex flex-col gap-2">
+      <div className="mt-4 flex flex-col gap-2 lg:grid lg:grid-cols-2 lg:gap-3">
         {results.length === 0 ? (
           <EmptyState
             title="No lessons found"

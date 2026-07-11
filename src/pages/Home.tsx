@@ -74,7 +74,7 @@ export function HomePage() {
   /* First run: pick a grade. */
   if (activeGrade === null) {
     return (
-      <div className="flex min-h-[70dvh] flex-col justify-center px-6">
+      <div className="mx-auto flex min-h-[70dvh] w-full max-w-lg flex-col justify-center px-6">
         <p className="text-sm font-bold tracking-wide text-brand-700 uppercase">
           Step-In Tutoring
         </p>
@@ -103,7 +103,7 @@ export function HomePage() {
 
   return (
     <div>
-      <header className="pt-safe px-4 pt-4">
+      <header className="pt-safe px-4 pt-4 lg:px-0 lg:pt-8">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm font-bold tracking-wide text-brand-700 uppercase">
@@ -130,12 +130,12 @@ export function HomePage() {
         </div>
       </header>
 
-      <div className="flex flex-col gap-5 px-4 py-5">
+      <div className="flex flex-col gap-5 px-4 py-5 lg:px-0">
         {/* Continue where you left off */}
         {continueLesson && !continueLesson.videoRemoved && (
           <Link
             to={`/lesson/${continueLesson.id}`}
-            className="flex items-center gap-4 rounded-2xl bg-brand-700 p-4 text-white active:bg-brand-800"
+            className="flex items-center gap-4 rounded-2xl bg-brand-700 p-4 text-white transition-colors hover:bg-brand-800 active:bg-brand-800"
           >
             <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-white/15">
               <IconPlay size={22} />
@@ -164,7 +164,7 @@ export function HomePage() {
               hint="Your tutors are adding content — check back soon."
             />
           ) : (
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
               {subjects.map((s) => {
                 const lessons = lessonsFor(curriculum, activeGrade, s.id);
                 const done = lessons.filter((l) => completed.has(l.id)).length;
@@ -172,7 +172,7 @@ export function HomePage() {
                   <Link
                     key={s.id}
                     to={`/g/${activeGrade}/s/${s.id}`}
-                    className="rounded-2xl border border-line bg-surface p-4 active:bg-brand-50"
+                    className="rounded-2xl border border-line bg-surface p-4 transition-colors hover:border-brand-200 hover:bg-brand-50 active:bg-brand-50"
                     style={{ borderBottom: `3px solid ${s.color}` }}
                   >
                     <div className="flex items-start justify-between">
@@ -203,10 +203,11 @@ export function HomePage() {
           )}
         </section>
 
-        {/* Downloads quick access */}
+        {/* Quick-access cards (side by side on desktop) */}
+        <div className="grid gap-3 lg:grid-cols-2">
         <Link
           to="/downloads"
-          className="flex items-center gap-4 rounded-2xl border border-line bg-surface p-4 active:bg-brand-50"
+          className="flex items-center gap-4 rounded-2xl border border-line bg-surface p-4 transition-colors hover:border-brand-200 hover:bg-brand-50 active:bg-brand-50"
         >
           <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700">
             <IconDownload size={22} />
@@ -225,7 +226,7 @@ export function HomePage() {
         {/* Career corner */}
         <Link
           to="/careers"
-          className="flex items-center gap-4 rounded-2xl border border-line bg-surface p-4 active:bg-brand-50"
+          className="flex items-center gap-4 rounded-2xl border border-line bg-surface p-4 transition-colors hover:border-brand-200 hover:bg-brand-50 active:bg-brand-50"
         >
           <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-amber-50 text-warn">
             <IconBriefcase size={22} />
@@ -238,10 +239,11 @@ export function HomePage() {
           </span>
           <IconChevronRight size={20} className="text-ink-faint" />
         </Link>
+        </div>
 
         <Link
           to="/admin-tools/upload"
-          className="self-center py-2 text-xs font-bold text-ink-faint"
+          className="self-center py-2 text-xs font-bold text-ink-faint hover:text-brand-700 lg:hidden"
         >
           Tutor / admin tools
         </Link>
