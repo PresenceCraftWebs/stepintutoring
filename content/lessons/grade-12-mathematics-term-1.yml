@@ -1,5 +1,3 @@
-# Grade 12 Mathematics — Term 1 (CAPS)
-# SEED DATA — see grade-10-mathematics-term-1.yml header for how seeds work.
 lessons:
   - id: g12-math-t1-01
     title: Arithmetic and geometric sequences
@@ -9,7 +7,8 @@ lessons:
     r2VideoKey: https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4
     r2FileSizeBytes: 991017
     durationMinutes: 18
-    tags: [exam-prep]
+    tags:
+      - exam-prep
     notes: |
       ## What you will learn
       Identifying arithmetic and geometric sequences, and using the general
@@ -20,14 +19,15 @@ lessons:
       - Geometric: constant ratio $r$; $T_n = ar^{n-1}$.
       - Always test *both* patterns before deciding which one you have.
   - id: g12-math-t1-02
-    title: "Functions: inverses and logarithms"
+    title: 'Functions: inverses and logarithms'
     topic: Functions
     order: 2
     hostProvider: r2
     r2VideoKey: https://test-videos.co.uk/vids/sintel/mp4/h264/360/Sintel_360_10s_5MB.mp4
     r2FileSizeBytes: 5241895
     durationMinutes: 20
-    tags: [exam-prep]
+    tags:
+      - exam-prep
     notes: |
       ## What you will learn
       Finding the inverse of a function, restricting domains so the inverse
@@ -38,13 +38,14 @@ lessons:
       - The graph of $f^{-1}$ is the reflection of $f$ in the line $y = x$.
       - $y = \log_a x$ is the inverse of $y = a^x$.
   - id: g12-math-t1-03
-    title: "Trigonometry: compound and double angles"
+    title: 'Trigonometry: compound and double angles'
     topic: Trigonometry
     order: 3
     hostProvider: youtube
     youtubeId: eRsGyueVLvQ
     durationMinutes: 16
-    tags: [past-paper]
+    tags:
+      - past-paper
     notes: |
       ## What you will learn
       The compound-angle and double-angle identities, and using them to
@@ -57,3 +58,14 @@ lessons:
 
       > This lesson streams from YouTube, so it needs a data connection —
       > it cannot be downloaded for offline viewing.
+  - id: g12-mathematics-t1-test-2-gbac
+    title: Test 2
+    topic: Test
+    order: 4
+    hostProvider: r2
+    r2VideoKey: videos/g12-mathematics-t1-test-2-gbac.mp4
+    r2FileSizeBytes: 20010181
+    durationMinutes: 6
+    tags:
+      - revision
+    notes: '# Test'
