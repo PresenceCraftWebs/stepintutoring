@@ -185,7 +185,12 @@ export function HomePage() {
         {/* The student's chosen subjects */}
         <section>
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-lg font-bold">Your subjects</h2>
+            <h2 className="text-lg font-bold">
+              Your subjects{' '}
+              <span className="font-bold text-brand-700">
+                · Grade {activeGrade}
+              </span>
+            </h2>
             <button
               type="button"
               onClick={() => setEditingSubjects(true)}
@@ -231,8 +236,8 @@ export function HomePage() {
                     <p className="mt-3 leading-tight font-bold">{s.name}</p>
                     <p className="mt-0.5 text-sm text-ink-faint">
                       {lessons.length === 0
-                        ? 'No lessons yet'
-                        : `${lessons.length} lesson${lessons.length === 1 ? '' : 's'}`}
+                        ? `No Grade ${activeGrade} lessons yet`
+                        : `${lessons.length} Grade ${activeGrade} lesson${lessons.length === 1 ? '' : 's'}`}
                     </p>
                   </Link>
                 );
